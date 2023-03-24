@@ -2,8 +2,20 @@
 
 {% block content %}
 
-    <div class="container" id='index'>
-        <p>Content index</p>
+    {% for pizza in pizzas %} 
+    <div class='container'> 
+      <div class='row'>    
+            <div class="card w-100 mx-auto shadow" style="width: 16rem;" href="#">
+                <img src="#" class="card-img-top" alt="...">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{pizza.title}}</h5>
+                    <p class="card-text">{{pizza.content}}</p>
+                    <p class="card-text">{{pizza.price}}</p>
+                </div>
+            </div>   
+      </div> 
     </div>
+    {% endfor %}   
+
 
 {% endblock %}
