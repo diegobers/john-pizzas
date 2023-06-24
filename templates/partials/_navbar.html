@@ -1,0 +1,53 @@
+{% load static %}
+
+
+<nav class="navbar bg-body-tertiary sticky-top">
+  <div class="container">
+    <div class="row w-100 d-flex align-items-center">
+      <div class="col">
+        <a class="navbar-brand" href="{% url 'index' %}">
+          <img src="{% static 'img/logo.jpeg' %}" alt="" class="logo">
+        </a>
+      </div>
+      <div class="col">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <form class="my-auto" role="search" action="{% url 'search' %}">
+              <input class="form-control border-secondary" name="keywords" type="text" placeholder="Pesquisar..."  value="{{ values.keywords }}">
+            </form>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <ul class="navbar-nav text-end">
+          <div class="row">
+            <div class="col my-auto">
+              <li class='nav-item'>
+                <a class='nav-link' href="#">
+                  <i class="fa-solid fa-cart-shopping"></i> Carrinho
+                </a>
+              </li>  
+            </div>
+            {% if request.user.is_authenticated %}         
+              <div class="col">
+                <li class='nav-item'>
+                  <a class='nav-link' href="{% url 'logout' %}">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                  </a>
+                </li>  
+              </div>
+              {% else %}
+              <div class="col">
+                 <li class='nav-item'>
+                  <a class='nav-link' href="{% url 'login' %}">
+                    <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                  </a>
+                </li>
+              </div>
+            {% endif %}
+         </div>
+        </ul> 
+      </div>
+    </div>
+  </div>
+</nav>

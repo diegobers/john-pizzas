@@ -1,12 +1,26 @@
+import os
+import dj_database_url
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = '***'
+SECRET_KEY = os.environ["SECRET_KEY_ENV_RAILWAY"]
 
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+AUTH_USER_MODEL = 'accounts.JohnPizzaAbstractUserModel'
+
+LOGIN_REDIRECT_URL = 'index'
+
+LOGIN_URL = 'login'
+
+CSRF_ALLOWED_ORIGINS = ['https://john-pizza-production.up.railway.app']
+
+CSRF_TRUSTED_ORIGINS = ['https://john-pizza-production.up.railway.app']
+
+CORS_ORIGINS_WHITELIST = ['https://john-pizza-production.up.railway.app']
 
 
 # Application definition
@@ -19,7 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # my app's
-    'order',
+    'orders',
+    'accounts',
+    'pages',
 ]
 
 MIDDLEWARE = [
@@ -30,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -37,7 +54,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -53,15 +70,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'john-pizza',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
-    }  
+# Database
+DATABASES = { 
+    'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -81,16 +92,26 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'pt-BR'
-TIME_ZONE = 'America/Sao_Paulo'
+TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+USE_THOUSAND_SEPARATOR = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-MEDIA_URL = 'img/'
-
-MEDIA_ROOT =  BASE_DIR / 'media' 
+MEDIA_URL = 'media/'
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# AWS S3 Bucket with Boto3 and django-storages
+AWS_ACCESS_KEY_ID = 'AKIA3COXWJFX6YQFBPRS'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'aws-s3djangoapps'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
