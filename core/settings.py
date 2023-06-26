@@ -16,11 +16,11 @@ LOGIN_REDIRECT_URL = 'index'
 
 LOGIN_URL = 'login'
 
-CSRF_ALLOWED_ORIGINS = ['https://john-pizza-production.up.railway.app']
+CSRF_ALLOWED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://john-pizza-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
 
-CORS_ORIGINS_WHITELIST = ['https://john-pizza-production.up.railway.app']
+CORS_ORIGINS_WHITELIST = ['https://john-pizzas-production.up.railway.app']
 
 
 # Application definition
