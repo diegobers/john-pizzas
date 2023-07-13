@@ -1,0 +1,84 @@
+
+<nav class="navbar navbar-expand-sm bg-body-tertiary sticky-top">
+  <div class="container-sm">
+  
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'img/logo.jpeg' %}" alt="" class="logo">
+      </a>
+
+
+
+  </div>
+</nav>
+
+
+<nav class="navbar navbar-expand-xl bg-body-tertiary sticky-top">
+  <div class="container-xl">
+  
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'img/logo.jpeg' %}" alt="" class="logo">
+      </a>
+
+
+
+  </div>
+</nav>
+
+
+
+
+
+<nav class="navbar navbar-expand-sm bg-body-tertiary sticky-top">
+  <div class="container">
+  
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'img/logo.jpeg' %}" alt="" class="logo">
+      </a>
+
+      <button class="navbar-toggler me-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  
+
+
+        <div class="col">
+          <ul class="navbar-nav">
+
+            <div class="row">
+              <div class="col my-auto">
+                <li class='nav-item'>
+                  <a class='nav-link' href="admin">
+                    <i class="fa-solid fa-cart-shopping"></i> Carrinho
+                  </a>
+                </li>  
+              </div>
+              {% if request.user.is_authenticated %}         
+                <div class="col">
+                  <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'logout' %}">
+                      <i class="fa-solid fa-right-from-bracket"></i> Sair
+                    </a>
+                  </li>  
+                </div>
+                {% else %}
+                <div class="col">
+                   <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'login' %}">
+                      <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                    </a>
+                  </li>
+                </div>
+              {% endif %}
+           </div>
+          </ul> 
+        </div>
+
+      </div>
+      
+
+  </div>
+</nav>
