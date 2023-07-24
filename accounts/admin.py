@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import JohnPizzaAbstractUserModel
+
+
+admin.site.register(JohnPizzaAbstractUserModel)

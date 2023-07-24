@@ -14,14 +14,43 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = 'accounts.JohnPizzaAbstractUserModel'
 
-LOGIN_REDIRECT_URL = 'dashboard'
-
 LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'index'
 
-ACCOUNT_EMAIL_REQUIRED = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+#ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = settings.LOGIN_URL
+#ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = None
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+#ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+#ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 180
+ACCOUNT_MAX_EMAIL_ADDRESSES = 2
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 3
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 1
+#ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_LOGOUT_ON_GET = True
+#ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
+#ACCOUNT_LOGIN_ON_PASSWORD_RESET = False
+ACCOUNT_PRESERVE_USERNAME_CASING = True
+ACCOUNT_PREVENT_ENUMERATION = True
+#ACCOUNT_RATE_LIMITS = {}
+ACCOUNT_SESSION_REMEMBER = None
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+ACCOUNT_USERNAME_MIN_LENGTH = 1
+ACCOUNT_USERNAME_REQUIRED = True
+
+SOCIALACCOUNT_AUTO_SIGNUP = True
+#SOCIALACCOUNT_EMAIL_VERIFICATION = settings.ACCOUNT_EMAIL_VERIFICATION
+#SOCIALACCOUNT_EMAIL_REQUIRED = settings.ACCOUNT_EMAIL_REQUIRED
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 
 CSRF_ALLOWED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
@@ -87,8 +116,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': 5432,
     }
 }
 
@@ -143,8 +176,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '123',
-            'secret': '456',
+            'client_id': '796086142721-0a5gl9nfmt6umkvtprgus3hneii3n3cl.apps.googleusercontent.com',
+            'secret': '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',
             'key': ''
         }
     }

@@ -3,6 +3,8 @@
 
 {% block content %}
   <div class='container mt-2 px-5'>
+
+        <p><a href="{% url 'google_login' %}">Log in with Google</a></p>    
     <form action="" method='POST'>
       {% csrf_token %}
       {{ form }}
