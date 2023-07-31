@@ -14,14 +14,34 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav">
-        
         <li class='nav-item'>
           <a class='nav-link' href="{% url 'pizzas' %}">
             <i class="fa-solid fa-pizza-slice"></i> Pizzas
           </a>
         </li>
+
+        <li class='nav-item'>
+          <a class='nav-link' href="{% url 'signin' %}">
+            <i class="fa-solid fa-pizza-slice"></i> Entrar
+          </a>
+        </li>
+
+        <li class='nav-item'>
+          <a class='nav-link' href="{% url 'signup' %}">
+            <i class="fa-solid fa-pizza-slice"></i> Cadastrar
+          </a>
+        </li>
+
+
+
+
       </ul>
       <ul class="navbar-nav ms-auto">
+        <li class='nav-item'>
+          <a class='nav-link' href="{% url 'dashboard' %}">
+            <i class="fa-solid fa-address-card"></i> Painel
+          </a>
+        </li>
         <li class='nav-item'>
           <a class='nav-link' href="admin">
             <i class="fa-solid fa-cart-shopping"></i> Carrinho

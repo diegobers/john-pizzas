@@ -19,6 +19,13 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'index'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_USE_TLS = False
+#EMAIL_PORT = 587
+#EMAIL_HOST_USER = 'diegobernardisza@gmail.com'
+#EMAIL_HOST_PASSWORD = '!Ogeid06$%1994#'
+#EMAIL_USE_SSL = True
+
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 #ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = settings.LOGIN_URL
@@ -51,7 +58,7 @@ SOCIALACCOUNT_AUTO_SIGNUP = True
 #SOCIALACCOUNT_EMAIL_VERIFICATION = settings.ACCOUNT_EMAIL_VERIFICATION
 #SOCIALACCOUNT_EMAIL_REQUIRED = settings.ACCOUNT_EMAIL_REQUIRED
 SOCIALACCOUNT_LOGIN_ON_GET = True
-
+SOCIALACCOUNT_QUERY_EMAIL = True
 
 CSRF_ALLOWED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
 
@@ -116,14 +123,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'postgres',
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres',
+#        'HOST': 'localhost',
+#        'PORT': 5432,
+#    }
+#}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -6,3 +6,5 @@ def dashboard(request):
   context = {}
 
   return render(request, 'accounts/dashboard.html', context)
+
+
