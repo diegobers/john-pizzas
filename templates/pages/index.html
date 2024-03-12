@@ -1,47 +1,34 @@
 {% extends 'base.html' %} 
-{% load static %}
 
+{% load grid_tags static %}
 
 {% block content %}
-  <!-- Showcase -->
-  <section id="showcase">
-    <div class="container text-center">
-      <div class="home-search p-5">
-        <div class="overlay p-1">
-          <img src="{% static 'img/banner.jpeg' %}" class="img-fluid" alt="...">
-        </div>
-      </div>
-    <hr>
-    </div>
-  </section>
-  <!-- Pizzas -->
-  <section id="pizzas" class="py-1">
-    <div class="container mb-3">
-      <h3 class="text-center mb-3">Pizzas - Ofertas</h3>
-      <div class="row">
-        {% if pizzas %}
-          {% for pizza in pizzas %}
-            <div class='col-sm-4 col-md-4 col-lg-4 col-xl-4 my-2'> 
-              <div class="card w-100 mx-auto shadow" href="#" style="width: 8rem; height: 14rem;">
-                <img src="{{pizza.photo_main.url}}" style="height: 10rem;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                  <h5 class="card-title">{{pizza.description}}</h5>
-                  <p class="card-text">
-                    <a href="{% url 'pizza' pizza.id %}" class="stretched-link"></a>
-                  </p>
-                </div>
-              </div>  
-            </div>
-          {% endfor %}
-        {% else %}
-          <div class="col-md-12">
-            <p>Ofertas Indisponiveis!!!</p>
-          </div>
-        {% endif %}
-      </div>
-    </div>
-  </section>
-
-
+<!-- Pizzas Section -->
+<section id="pizzas" class="py-1">
+  {% container %}
+    <h3 class="text-center mb-3">Pizzas</h3>
+    {% row %}
+      {% if pizzas %}
+        {% for pizza in pizzas %}
+          {% col 'col-sm-4 col-md-4 col-lg-4 col-xl-4 my-2' %}
+            <div class="card w-100 mx-auto shadow" href="#" style="width: 8rem; height: 14rem;">
+              <img src="{{ pizza.image.url }}" style="height: 10rem;" class="card-img-top" alt="...">
+              <div class="card-body text-center">
+                <h5 class="card-title">{{ pizza.description }}</h5>
+                <p class="card-text">
+                  <a href="#" class="stretched-link"></a>
+                </p>
+              </div>
+            </div>  
+          {% endcol %}
+        {% endfor %}
+      {% else %}
+        {% col 'col-md-12 my-2' %}
+          <p>Pizzas Indisponiveis!!!</p>
+        {% endcol %}
+      {% endif %}
+    {% endrow %}
+  {% endcontainer %}
+</section>
 
 {% endblock %}
