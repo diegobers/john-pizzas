@@ -1,13 +1,9 @@
-from django.shortcuts import render
+from django.views.generic import ListView
 
-from orders.models import Pizza
+from catalogue.models import Pizza
 
 
-def index(request):
-    pizzas = Pizza.objects.order_by('-list_date').filter(is_published=True)[:3]
-
-    context = {
-        'pizzas': pizzas, 
-    }
-
-    return render(request, 'pages/index.html', context)
+class IndexTemplateView(ListView):
+    model = Pizza
+    template_name = "pages/index.html"
+    context_object_name = 'pizzas'
