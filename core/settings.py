@@ -16,7 +16,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DEBUG = env.bool("DEBUG", default=True)
 
-SECRET_KEY = env.str("RAILWAY_SECRET")
+SECRET_KEY = env("RAILWAY_SECRET")
 
 AUTH_USER_MODEL = 'accounts.JohnPizzaAbstractUserModel'
 
