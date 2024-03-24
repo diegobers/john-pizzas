@@ -1,15 +1,22 @@
+import environ
 import os
 from pathlib import Path
 
-import environ
 
-
-BASE_DIR = environ.Path(__file__) - 3
 env = environ.Env()
-env.read_env(BASE_DIR('.env'))
 
-DEBUG = env('DEBUG')
-SECRET_KEY = env('SECRET_KEY')
+# Set the project base directory
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+DEBUG = env.bool("DEBUG", default=True)
+
+SECRET_KEY = env.str("SECRET_KEY")
 
 AUTH_USER_MODEL = 'accounts.JohnPizzaAbstractUserModel'
 
@@ -29,15 +36,14 @@ INSTALLED_APPS = [
 
     # my app's
     'accounts',
+    'orders',
     'pages',
-    'catalogue',
-    #'orders',
     #'checkout',
-
+    'django_bootstrap5',
     # third lib
     'allauth',
     'allauth.account',
-    #'allauth.socialaccount',
+    'allauth.socialaccount',
     #'allauth.socialaccount.providers.google',
 
 ]
@@ -50,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -57,7 +64,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            os.path.join(BASE_DIR , 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,18 +74,38 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
+
+
+
         },
     },
 ]
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Database
-
-DATABASES = { 
-    'default': env.db(),
+DATABASES = {
+    "default": env.db("DATABASE_URL"),
 }
+
+## Database
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
+#    }
+#}
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -102,13 +131,38 @@ USE_TZ = True
 USE_THOUSAND_SEPARATOR = True
 
 # Static files
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [ BASE_DIR / "static", ]
+STATICFILES_DIRS = [ os.path.join(BASE_DIR , "static") ]
+STATIC_ROOT = os.path.join(BASE_DIR , "staticfiles")
+STATIC_URL = env.str("STATIC_URL", default="static/")
+
 
 # Base url to serve media files
 MEDIA_URL = '/media/'
 # Path where media is stored
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Auth
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+#ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = settings.LOGIN_URL
+#ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = None
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+#ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_LOGOUT_ON_GET = True

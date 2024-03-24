@@ -1,53 +1,45 @@
-{% load static %}
+<!-- NavBar -->
+{% load grid_tags static %}
 
-
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-  <div class="container">
-
+<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" aria-label="Template Navbar">
+  {% container %}
     <a class="navbar-brand" href="{% url 'index' %}">
       <img src="{% static 'img/logo.jpeg' %}" alt="" class="logo">
     </a>
-    
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#MynavbarHeader" aria-controls="MynavbarHeader" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="MynavbarHeader">
       <ul class="navbar-nav">
         <li class='nav-item'>
           <a class='nav-link' href="{% url 'pizzas' %}">
             <i class="fa-solid fa-pizza-slice"></i> Pizzas
           </a>
         </li>
-
         <li class='nav-item'>
-          <a class='nav-link' href="{% url 'signin' %}">
-            <i class="fa-solid fa-pizza-slice"></i> Entrar
+          <a class='nav-link' href="{% url 'order-detail' %}">
+            <i class="fa-solid fa-cart-shopping"></i> Carrinho
           </a>
         </li>
-
         <li class='nav-item'>
-          <a class='nav-link' href="{% url 'signup' %}">
-            <i class="fa-solid fa-pizza-slice"></i> Cadastrar
+          <a class='nav-link' href="{% url 'orders-list' %}">
+            <i class="fa-solid fa-table-list"></i> Pedidos
           </a>
         </li>
-
-
-
-
       </ul>
+
       <ul class="navbar-nav ms-auto">
         <li class='nav-item'>
           <a class='nav-link' href="{% url 'dashboard' %}">
             <i class="fa-solid fa-address-card"></i> Painel
           </a>
         </li>
-        <li class='nav-item'>
-          <a class='nav-link' href="admin">
-            <i class="fa-solid fa-cart-shopping"></i> Carrinho
-          </a>
-        </li>
         {% if request.user.is_authenticated %}
+          <li class='nav-item'>
+            <a class='nav-link' href="admin">
+              <i class="fa-solid fa-lock"></i> Admin
+            </a>
+          </li>
           <li class='nav-item'>
             <a class='nav-link' href="{% url 'logout' %}">
               <i class="fa-solid fa-right-from-bracket"></i> Sair
@@ -55,14 +47,17 @@
           </li>  
         {% else %}
           <li class='nav-item'>
-            <a class='nav-link' href="{% url 'login' %}">
+            <a class='nav-link' href="{% url 'signup' %}">
+              <i class="fa-solid fa-user-plus"></i> Cadastrar
+            </a>
+          </li>
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'signin' %}">
               <i class="fa-solid fa-right-to-bracket"></i> Entrar
             </a>
           </li>
         {% endif %}
       </ul>
-      
     </div>
-
-  </div>
+  {% endcontainer %}
 </nav>

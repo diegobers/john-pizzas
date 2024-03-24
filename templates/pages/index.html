@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'layouts/base.html' %} 
 
 {% load grid_tags static %}
 
@@ -12,7 +12,7 @@
         {% for pizza in pizzas %}
           {% col 'col-sm-4 col-md-4 col-lg-4 col-xl-4 my-2' %}
             <div class="card w-100 mx-auto shadow" href="#" style="width: 8rem; height: 14rem;">
-              <img src="{{ pizza.image.url }}" style="height: 10rem;" class="card-img-top" alt="...">
+              <img src="{{ pizza.photo_1.url }}" style="height: 10rem;" class="card-img-top" alt="...">
               <div class="card-body text-center">
                 <h5 class="card-title">{{ pizza.description }}</h5>
                 <p class="card-text">
@@ -30,5 +30,4 @@
     {% endrow %}
   {% endcontainer %}
 </section>
-
-{% endblock %}
+{% endblock content %}

@@ -1,7 +1,21 @@
 # Django stuff:
 __pycache__/
 db.sqlite3
+*/migrations/
 
 # Environments
+env/
 .env
 .keys
+
+templates/basket
+templates/cart
+templates/catalogue
+templates/order
+cart/
+catalogue/
+checkout/
+order/
+orders/
+req
+req.txt

@@ -1,10 +1,9 @@
-from django.shortcuts import render
+from django.views.generic import ListView
+
+from .models import JohnPizzaAbstractUserModel
 
 
-def dashboard(request):
-
-  context = {}
-
-  return render(request, 'accounts/dashboard.html', context)
-
-
+class IndexTemplateView(ListView):
+    model = JohnPizzaAbstractUserModel
+    template_name = "accounts/dashboard.html"
+    context_object_name = 'user'
