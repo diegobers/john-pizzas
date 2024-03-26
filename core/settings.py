@@ -76,7 +76,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.request',
             ],
 
 
@@ -86,6 +85,9 @@ TEMPLATES = [
 ]
 
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
@@ -95,7 +97,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 DATABASES = { 
-    'default': dj_database_url.config(default=os.environ["SQLITE_URL"]),
+    'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
 }
 #DATABASES = {
 #    "default": env.db("DATABASE_URL"),
