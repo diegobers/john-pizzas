@@ -24,6 +24,9 @@ AUTH_USER_MODEL = 'accounts.JohnPizzaAbstractUserModel'
 ALLOWED_HOSTS = env.list('HOSTS')
 SITE_ID = 1
 
+CSRF_ALLOWED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
+CORS_ORIGINS_WHITELIST = ['https://john-pizzas-production.up.railway.app']
 
 # App's
 INSTALLED_APPS = [
@@ -85,9 +88,6 @@ TEMPLATES = [
 ]
 
 STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
@@ -100,7 +100,7 @@ DATABASES = {
     'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
 }
 #DATABASES = {
-#    "default": env.db("DATABASE_URL"),
+#    "default": env.db("SQLITE_URL"), DATABASE_URL RAILWAY_URL
 #}
 
 # Password validation
