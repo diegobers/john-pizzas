@@ -99,19 +99,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = { 
     'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
 }
-
 #DATABASES = {
 #    "default": env.db("DATABASE_URL"),
 #}
-
-## Database
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
-#    }
-#}
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
