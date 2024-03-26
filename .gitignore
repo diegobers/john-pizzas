@@ -7,15 +7,3 @@ db.sqlite3
 env/
 .env
 .keys
-
-templates/basket
-templates/cart
-templates/catalogue
-templates/order
-cart/
-catalogue/
-checkout/
-order/
-orders/
-req
-req.txt

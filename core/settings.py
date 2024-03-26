@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -85,9 +86,6 @@ TEMPLATES = [
 ]
 
 STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
@@ -97,7 +95,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 DATABASES = { 
-    'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
+    'default': dj_database_url.config(default=os.environ["SQLITE_URL"]),
 }
 #DATABASES = {
 #    "default": env.db("DATABASE_URL"),
@@ -139,7 +137,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
