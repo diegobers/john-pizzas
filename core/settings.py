@@ -1,5 +1,6 @@
 import environ
 import os
+import dj_database_url
 from pathlib import Path
 
 
@@ -94,9 +95,14 @@ STORAGES = {
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-DATABASES = {
-    "default": env.db("DATABASE_URL"),
+# Database
+DATABASES = { 
+    'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
 }
+
+#DATABASES = {
+#    "default": env.db("DATABASE_URL"),
+#}
 
 ## Database
 #DATABASES = {
