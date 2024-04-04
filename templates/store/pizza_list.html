@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %} 
+
+{% load grid_tags static %}
+
+{% block content %}
+
+    <h1>Pizzas</h1>
+    <ul>
+        {% for pizza in pizzas %}
+        <li>{{ pizza.name }} - ${{ pizza.price }}
+            <form action="{% url 'add_cart' pizza.id %}" method="POST">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="1" min="1">
+                <button type="submit">Add to Cart</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+
+{% endblock content %}

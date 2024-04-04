@@ -11,12 +11,12 @@
       {% if pizzas %}
         {% for pizza in pizzas %}
           {% col 'col-sm-4 col-md-4 col-lg-4 col-xl-4 my-2' %}
-            <div class="card w-100 mx-auto shadow" href="#" style="width: 8rem; height: 14rem;">
+            <div class="card w-100 mx-auto shadow" href="" style="width: 8rem; height: 14rem;">
               <img src="{{ pizza.photo_1.url }}" style="height: 10rem;" class="card-img-top" alt="...">
               <div class="card-body text-center">
                 <h5 class="card-title">{{ pizza.description }}</h5>
                 <p class="card-text">
-                  <a href="#" class="stretched-link"></a>
+                  <a href="{% url 'detail' pizza.slug %}" class="stretched-link"></a>
                 </p>
               </div>
             </div>  

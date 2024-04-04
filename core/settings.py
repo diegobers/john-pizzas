@@ -42,8 +42,9 @@ INSTALLED_APPS = [
     'accounts',
     'orders',
     'pages',
-    #'checkout',
+    'cart',
     'django_bootstrap5',
+    'store',
     # third lib
     'allauth',
     'allauth.account',
@@ -79,6 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'store.context_processors.cart_items_count',
             ],
 
 
@@ -100,7 +102,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 DATABASES = { 
-    'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
+    'default': dj_database_url.config(default=os.environ["SQLITE_URL"]),
 }
 #DATABASES = {
 #    "default": env.db("SQLITE_URL"), DATABASE_URL RAILWAY_URL

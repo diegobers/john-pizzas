@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %} 
+
+{% load grid_tags static %}
+
+
+{% block content %}
+
+    <h3>{{ request.user }}</h3>
+    <h1>Shopping Cart</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.pizza.name }}</td>
+                <td>${{ item.pizza.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3">Total:</td>
+                <td>${{ total }}</td>
+            </tr>
+            <tr>
+                <td colspan="3">total_qty:</td>
+                <td>${{ total_qty }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+
+    <h1>Shopping Cart</h1>
+    <p>Total items in cart: {{ count }}</p>
+    <ul>
+        {% for item in cart_items %}
+        <li>{{ item.pizza.name }} - Quantity: {{ item.quantity }}</li>
+        <li>{{ total }}</li>
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'index' %}">
+        <button type="submit">Checkout</button>
+    </form>
+
+
+{% endblock content %}
