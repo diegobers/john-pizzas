@@ -1,8 +1,7 @@
 <!-- NavBar -->
-{% load grid_tags static %}
+{% load static %}
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" aria-label="Template Navbar">
-  {% container %}
     <a class="navbar-brand" href="{% url 'index' %}">
       <img src="{% static 'img/logo.jpeg' %}" alt="" class="logo">
     </a>
@@ -71,5 +70,4 @@
         {% endif %}
       </ul>
     </div>
-  {% endcontainer %}
 </nav>
