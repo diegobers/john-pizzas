@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     'orders',
     'pages',
-    'cart',
+    #'cart',
     'django_bootstrap5',
     'store',
     # third lib
