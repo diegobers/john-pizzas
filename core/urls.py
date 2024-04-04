@@ -11,7 +11,7 @@ urlpatterns = [
     #path('pizzas-show/', include("pages.urls")),
     path('entrar/', include("accounts.urls")),
     path('pedidos/', include("orders.urls")),
-    path('carrinho/', include("cart.urls")),
+    #path('carrinho/', include("cart.urls")),
     path('contas/', include('allauth.urls')),
     
 ]
