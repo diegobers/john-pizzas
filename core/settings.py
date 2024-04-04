@@ -40,8 +40,8 @@ INSTALLED_APPS = [
 
     # my app's
     'accounts',
-    'orders',
-    'pages',
+    #'orders',
+    #'pages',
     #'cart',
     'django_bootstrap5',
     'store',
