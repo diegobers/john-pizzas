@@ -16,7 +16,16 @@
               <div class="card-body text-center">
                 <h5 class="card-title">{{ pizza.description }}</h5>
                 <p class="card-text">
-                  <a href="{% url 'detail' pizza.slug %}" class="stretched-link"></a>
+
+
+                <form method="post" action="{% url 'add_cart' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="quantity" value="1">
+
+                  <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
+                  <button type="submit">Add to Cart</button>
+                </form>
+
                 </p>
               </div>
             </div>  
@@ -28,6 +37,18 @@
         {% endcol %}
       {% endif %}
     {% endrow %}
+
+    
+
+  <hr>
+  <p>session session_key</p>
+  {{ request.session.session_key }}
+  <hr>
+
+  <p> csrf COOCKIES</p>
+  {{ request.COOKIES }}
+  <hr>
+
   {% endcontainer %}
 </section>
 {% endblock content %}

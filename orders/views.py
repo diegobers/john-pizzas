@@ -3,22 +3,25 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.views import  View
+from django.views.generic import UpdateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
-from .models import Pizza, OrderItem, Order
+from .models import Pizza, Order
 
 
-class OrdersListView(ListView):
+class OrdersListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'orders/orders.html'
     context_object_name = 'orders'
 
-class OrderItemListView(DetailView):
-    model = OrderItem
-    template_name = 'orders/order-itens.html'
-    context_object_name = 'order_item'
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(customer=self.request.user)
+
 
 class OrderSummaryView(View):
     def get(self, *args, **kwargs):
@@ -31,6 +34,12 @@ class OrderSummaryView(View):
         except ObjectDoesNotExist:
             messages.warning(self.request, "Carrinho vazio!!")
             return redirect("/")
+
+
+
+
+
+
 
 def PizzaSearchView(request):
   queryset_list = Pizza.objects.order_by('-list_date')

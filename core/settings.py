@@ -21,8 +21,19 @@ SECRET_KEY = env("RAILWAY_SECRET")
 
 AUTH_USER_MODEL = 'accounts.JohnPizzaAbstractUserModel'
 
+SESSION_COOKIE_NAME = 'store'
+
+#SESSION_SAVE_EVERY_REQUEST = True
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 ALLOWED_HOSTS = env.list('HOSTS')
+
 SITE_ID = 1
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 CSRF_ALLOWED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
 CSRF_TRUSTED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
@@ -41,11 +52,12 @@ INSTALLED_APPS = [
     # my app's
     'accounts',
     #'orders',
-    #'pages',
+    'pages',
     #'cart',
     'django_bootstrap5',
     'store',
     # third lib
+    'debug_toolbar',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -54,6 +66,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -80,7 +93,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'store.context_processors.cart_items_count',
+                #'store.context_processors.cart_items_count',
             ],
 
 

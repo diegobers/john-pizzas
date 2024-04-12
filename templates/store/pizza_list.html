@@ -6,16 +6,28 @@
 
     <h1>Pizzas</h1>
     <ul>
+
         {% for pizza in pizzas %}
         <li>{{ pizza.name }} - ${{ pizza.price }}
-            <form action="{% url 'add_cart' pizza.id %}" method="POST">
-                {% csrf_token %}
-                <input type="number" name="quantity" value="1" min="1">
-                <button type="submit">Add to Cart</button>
-            </form>
+
+                <form method="post" action="{% url 'add_cart' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="quantity" value="1">
+
+                  <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
+                  <button type="submit">Add to Cart</button>
+                </form>
         </li>
         {% endfor %}
     </ul>
 
+  <hr>
+  <p>session session_key</p>
+  {{ request.session.session_key }}
+  <hr>
+
+  <p> csrf COOCKIES</p>
+  {{ request.COOKIES }}
+  <hr>
 
 {% endblock content %}
