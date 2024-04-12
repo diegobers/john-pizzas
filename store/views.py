@@ -21,9 +21,49 @@ class PizzaListView(ListView):
     model = Pizza
     template_name = 'store/pizza_list.html'
     context_object_name = 'pizzas'
+ 
 
+class CartView(ListView):
+    model = CartItem
+    template_name = 'store/cart.html'
+    context_object_name = 'cart_items'
 
-class CartView(View):
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return CartItem.objects.filter(cart__user=self.request.user)
+
+        if self.request.user.is_anonymous:
+            if self.request.session.session_key:
+                return CartItem.objects.filter(cart__session_key=self.request.session.session_key)
+        else:
+            return redirect('store:view_cart') 
+
+class AddToCartView(View):
+    def post(self, request, *args, **kwargs):
+        pizza_id = request.POST.get('pizza_id')
+        qty = int(request.POST.get('quantity', 1))
+        pizza = Product.objects.get(id=pizza_id)
+
+        if request.user.is_authenticated:
+            cart, _ = Cart.objects.get_or_create(user=request.user)
+        
+        if request.user.is_anonymous:
+            if request.session.session_key:
+                cart = Cart.objects.get(session_key=request.session.session_key)
+            else:
+                session_store = SessionStore()
+                session_store.save()
+                session_key = session_store.session_key
+                
+                request.session = session_store
+                cart = Cart.objects.create(session_key=session_store.session_key) 
+        
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, pizza=pizza, quantity=qty)
+        cart_item.save()
+
+        return redirect('store:view_cart')
+
+class CartView111(View):
     def get(self, request):
         if request.user.is_authenticated:
             cart_items = CartItem.objects.filter(cart__user=request.user)
@@ -34,7 +74,7 @@ class CartView(View):
         return render(request, 'store/cart.html', {'cart_items': cart_items})
 
 
-class AddToCartView(View):
+class AddToCartView111(View):
     def post(self, request):
         pizza_id = request.POST.get('pizza_id')
         qty = int(request.POST.get('quantity', 1))
