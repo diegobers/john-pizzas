@@ -115,7 +115,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 DATABASES = { 
-    'default': dj_database_url.config(default=os.environ["RAILWAY_URL"]),
+    'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
 }
 #DATABASES = {
 #    "default": env.db("SQLITE_URL"), DATABASE_URL RAILWAY_URL
