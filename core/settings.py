@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'store',
     # third lib
-    'debug_toolbar',
+    #'debug_toolbar',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -115,7 +115,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 DATABASES = { 
-    'default': dj_database_url.config(default=os.environ["DATABASE_URL"]),
+    'default': dj_database_url.config(default=os.environ["RAILWAY_URL"]),
 }
 #DATABASES = {
 #    "default": env.db("SQLITE_URL"), DATABASE_URL RAILWAY_URL
