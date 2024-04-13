@@ -42,7 +42,7 @@ class AddToCartView(View):
     def post(self, request, *args, **kwargs):
         pizza_id = request.POST.get('pizza_id')
         qty = int(request.POST.get('quantity', 1))
-        pizza = Piiza.objects.get(id=pizza_id)
+        pizza = Pizza.objects.get(id=pizza_id)
 
         if request.user.is_authenticated:
             cart, _ = Cart.objects.get_or_create(user=request.user)
