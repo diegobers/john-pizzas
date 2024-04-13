@@ -164,9 +164,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Auth
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'store:index'
+LOGOUT_REDIRECT_URL = 'store:index'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

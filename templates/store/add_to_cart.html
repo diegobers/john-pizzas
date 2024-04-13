@@ -6,7 +6,7 @@
 
     <h1>Add to Cart</h1>
 
-    <form method="post" action="{% url 'add_cart' %}">
+    <form method="post" action="{% url 'store:add_cart' %}">
       {% csrf_token %}
       <input type="hidden" name="quantity" value="1">
 

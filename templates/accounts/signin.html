@@ -21,7 +21,7 @@
               <small>Or sign in with credentials</small>
             </div> 
 
-            <form class="login" method="POST" action="{% url 'signin' %}">
+            <form class="login" method="POST" action="{% url 'accounts:signin' %}">
               {% csrf_token %}
               {% bootstrap_form form %}
               
