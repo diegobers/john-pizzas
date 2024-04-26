@@ -47,9 +47,9 @@
 
           
           <li class='nav-item'>
-            <a class='nav-link' href="#">
-              <i class="fa-solid fa-table-list"></i> Pedidos
-            </a>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'store:order_list' %}">Pedidos</a>
+            </li> 
           </li>
           <li class='nav-item'>
             <a class='nav-link' href="{% url 'accounts:logout' %}">

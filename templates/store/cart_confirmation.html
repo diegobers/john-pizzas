@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html' %}
+
+
+{% block content %}
+<h1>Resumo do Pedido</h1>
+
+   <h1>Carrinho</h1>
+    {% if cart_items %}
+        <ul>
+            {% for item in cart_items %}
+                <li>{{ item.product.name }} - Qtd: {{ item.quantity }}</li>
+            {% endfor %}
+        </ul>
+    <form method="post" action="{% url 'store:order_confirmation' %}">
+        {% csrf_token %}
+        <button type="submit">Finalizar</button>
+    </form>
+    {% else %}
+        <p>Carrinho Vazio...</p>
+    {% endif %}
+
+
+{% endblock %}
