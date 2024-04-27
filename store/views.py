@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import CreateView, ListView, TemplateView, View
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Pizza, Cart, CartItem, Order, ShippingAddress, Payment
+from .models import Pizza, Cart, CartItem, Order, OrderItem, ShippingAddress, Payment
 from django.http import JsonResponse
 
 
@@ -14,12 +14,10 @@ class IndexView(TemplateView):
         context['pizzas'] = Pizza.objects.all()
         return context
 
-
 class PizzaListView(ListView):
     model = Pizza
     template_name = 'store/pizza_list.html'
     context_object_name = 'pizzas'
- 
 
 class CartView(ListView):
     model = CartItem
@@ -69,7 +67,7 @@ class CartConfirmationView(LoginRequiredMixin, TemplateView):
 
         order = Order.objects.create(
             user=self.request.user,
-            total_amount=total_amount,
+            total=total_amount,
         )
 
         for cart_item in cart_items:

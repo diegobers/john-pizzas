@@ -32,6 +32,16 @@
 				</div>
 		  {% endcol %}
 	  {% endrow %}
+
+	  
+  <hr>
+  <p>session session_key</p>
+  {{ request.session.session_key }}
+  <hr>
+
+  <p> last_session_key</p>
+  {{ request.session.last_session_key }}
+  <hr>
 	{% endcontainer %}
 </section>
 {% endblock content %}
