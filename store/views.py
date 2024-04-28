@@ -19,6 +19,10 @@ class PizzaListView(ListView):
     template_name = 'store/pizza_list.html'
     context_object_name = 'pizzas'
 
+class CustomDashboardView(LoginRequiredMixin, TemplateView):
+    model = Pizza
+    template_name = 'store/dashboard.html'
+
 class CartView(ListView):
     model = CartItem
     template_name = 'store/cart.html'
