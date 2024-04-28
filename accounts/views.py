@@ -1,6 +1,12 @@
-from allauth.account.views import LoginView
+from allauth.account.views import LoginView, SignupView
 from django.urls import reverse_lazy
 from store.models import Cart
+from django.views.generic import TemplateView
+
+
+class CustomSignupView(SignupView):
+    template_name = 'signup.html'
+    success_url = reverse_lazy('store:view_cart') 
 
 
 class CustomLoginView(LoginView):

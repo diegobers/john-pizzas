@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% load grid_tags %}
+{% load grid_tags socialaccount %}
 
 {% block title %}Entrar Na Conta{% endblock %}
 
@@ -14,7 +14,7 @@
           <div class="card-header bg-transparent">
             <h5 class="text-dark text-center mt-2 mb-3">CusTOMM</h5>
             <div class="btn-wrapper text-center">
-              <a href="#" class="btn btn-neutral btn-icon btn-sm mb-0">
+              <a href="{% provider_login_url 'google' %}" class="btn btn-neutral btn-icon btn-sm mb-0">
                 <i class="fa-brands fa-google"></i> Google
               </a>
             </div>

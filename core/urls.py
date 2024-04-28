@@ -14,6 +14,7 @@ urlpatterns = [
     #path('pedidos/', include("orders.urls")),
     #path('carrinho/', include("cart.urls")),
     path('contas/', include('allauth.urls')),
+    path('contas/', include('allauth.socialaccount.urls')),
     
 ]
 if settings.DEBUG:

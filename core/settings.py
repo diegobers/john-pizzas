@@ -25,7 +25,7 @@ SESSION_COOKIE_NAME = 'store'
 
 #SESSION_SAVE_EVERY_REQUEST = True
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 ALLOWED_HOSTS = env.list('HOSTS')
 
@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    #'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.google',
+    #meuoauth2provider@gmail.com
 
 ]
 
