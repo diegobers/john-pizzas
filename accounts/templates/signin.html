@@ -1,0 +1,47 @@
+{% extends 'layouts/base.html' %}
+
+{% load grid_tags %}
+
+{% block title %}Entrar Na Conta{% endblock %}
+
+
+{% block content %} 
+<section>
+  {% container %}
+    {% row 'justify-content-center' %}
+      {% col 'col-lg-4 col-md-7' %}
+        <div class="card border-0 mb-0">
+          <div class="card-header bg-transparent">
+            <h5 class="text-dark text-center mt-2 mb-3">CusTOMM</h5>
+            <div class="btn-wrapper text-center">
+              <a href="#" class="btn btn-neutral btn-icon btn-sm mb-0">
+                <i class="fa-brands fa-google"></i> Google
+              </a>
+            </div>
+          </div>
+          <div class="card-body px-lg-5 pt-0">
+            <div class="text-center text-muted mb-4">
+              <small>Entrar com seu Login</small>
+            </div> 
+            <form class="login" method="POST" action="{% url 'accounts:login' %}">
+              {% csrf_token %}
+              {{ form }}
+              <button type="submit">Entrare</button>
+            </form>
+          </div>
+        </div>
+      {% endcol %}
+    {% endrow %}
+
+
+  <hr>
+  <p>session session_key</p>
+  {{ request.session.session_key }}
+  <hr>
+
+  <p> last_session_key</p>
+  {{ request.session.last_session_key }}
+  <hr>
+  {% endcontainer %}
+</section>  
+{% endblock content %}
