@@ -1,0 +1,20 @@
+{% extends "account/email/base_message.txt" %}
+
+
+{% block content %}
+
+	{% autoescape off %}
+
+	You are receiving this mail because the following change was made to your account:
+
+	{% block notification_message %}
+	{% endblock notification_message%}
+
+	If you do not recognize this change then please take proper security precautions immediately. The change to your account originates from:
+
+	- IP address: {{ip}}
+	- Browser: {{user_agent}}
+	- Date: {{timestamp}}
+	{% endautoescape %}
+
+{% endblock %}

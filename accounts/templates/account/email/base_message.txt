@@ -1,0 +1,7 @@
+{% autoescape off %}
+Olá, {{ user.email }}
+{% block content %}
+{% endblock content %}
+Agradeçemos sua preferência!!
+{{ current_site.domain }}
+{% endautoescape %}
