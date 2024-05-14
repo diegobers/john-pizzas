@@ -15,7 +15,7 @@
                 <li>{{ item.pizza.name }} - Qtd: {{ item.quantity }}</li>
             {% endfor %}
         </ul>
-        <form method="post" action="{% url 'store:confirm_cart' %}">
+        <form action="{% url 'store:confirm_cart' %}">
             {% csrf_token %}
             <button type="submit">Finalizar Carrinho</button>
         </form>

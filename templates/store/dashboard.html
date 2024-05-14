@@ -1,0 +1,30 @@
+{% extends 'layouts/base.html' %} 
+
+{% load account static %}
+
+{% block title %}Painel{% endblock %}
+
+
+{% block content %}
+
+
+   <h1>Painel</h1>
+
+    {{ user }}
+
+
+    {{ request.user.phone_number }}
+    
+    {{ user }}
+
+
+  <hr>
+  <p>session session_key</p>
+  {{ request.session.session_key }}
+  <hr>
+
+  <p> csrf COOCKIES</p>
+  {{ request.COOKIES }}
+  <hr>
+
+{% endblock content %}

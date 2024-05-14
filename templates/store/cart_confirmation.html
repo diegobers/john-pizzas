@@ -4,19 +4,19 @@
 {% block content %}
 <h1>Resumo do Pedido</h1>
 
-   <h1>Carrinho</h1>
+   <h1>Seu peido </h1>
     {% if cart_items %}
         <ul>
             {% for item in cart_items %}
-                <li>{{ item.product.name }} - Qtd: {{ item.quantity }}</li>
+                <li>{{ item.pizza.name }} - Qtd: {{ item.quantity }}</li>
             {% endfor %}
         </ul>
-    <form method="post" action="{% url 'store:order_confirmation' %}">
+    <form method="post" action="{% url 'store:view_order' %}">
         {% csrf_token %}
         <button type="submit">Finalizar</button>
     </form>
     {% else %}
-        <p>Carrinho Vazio...</p>
+        <p>Order Vazio...</p>
     {% endif %}
 
 
