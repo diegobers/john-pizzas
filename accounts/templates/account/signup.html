@@ -14,9 +14,12 @@
 					<div class="card-header bg-transparent">
 						<h5 class="text-dark text-center mt-2 mb-3">CCCadastro</h5>
 						<div class="btn-wrapper text-center">
+							{% if process == "connect" %}
 							<a href="{% provider_login_url 'google' %}" class="btn btn-neutral btn-icon btn-sm mb-0">
-	              <i class="fa-brands fa-google"></i> Google
-	            </a>
+				              <i class="fa-brands fa-google"></i> Google
+				            </a>
+			                {% endif %}
+
 						</div>
 					</div>
 					<div class="card-body px-lg-5 pt-0">
