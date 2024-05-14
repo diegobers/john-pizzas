@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from django.views.generic import CreateView, ListView, TemplateView, View
+from django.views.generic import CreateView, ListView, TemplateView, View, DetailView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Pizza, Cart, CartItem, Order, OrderItem, ShippingAddress, Payment
 from django.http import JsonResponse
-
+from accounts.models import JohnPizzaAbstractUserModel
 
 class IndexView(TemplateView):
     template_name = 'pages/index.html'
@@ -19,21 +19,18 @@ class PizzaListView(ListView):
     template_name = 'store/pizza_list.html'
     context_object_name = 'pizzas'
 
-class CustomDashboardView(LoginRequiredMixin, TemplateView):
-    model = Pizza
+class UserProfileDetailView(LoginRequiredMixin, DetailView):
+    model = JohnPizzaAbstractUserModel
     template_name = 'store/dashboard.html'
+    context_object_name = 'user'
 
-class CartView(ListView):
-    model = CartItem
-    template_name = 'store/cart.html'
-    context_object_name = 'cart_items'
+    def get_object(self, queryset=None):
+        return self.request.user
 
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return CartItem.objects.filter(cart__user=self.request.user)
-
-        elif self.request.user.is_anonymous:
-            return CartItem.objects.filter(cart__session_key=self.request.session.session_key)
+class CustomDashboardView(LoginRequiredMixin, TemplateView):
+    model = JohnPizzaAbstractUserModel
+    template_name = 'store/dashboard.html'
+    context_object_name = 'customer'
 
 class AddToCartView(View):
     def post(self, request, *args, **kwargs):
@@ -53,9 +50,58 @@ class AddToCartView(View):
 
         return redirect('store:view_cart')
 
-class CartConfirmationView(LoginRequiredMixin, TemplateView):
-    template_name = 'store/cart_confirmation.html'
+class CartView(ListView):
+    model = CartItem
+    template_name = 'store/cart.html'
+    context_object_name = 'cart_items'
 
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return CartItem.objects.filter(cart__user=self.request.user)
+
+        elif self.request.user.is_anonymous:
+            return CartItem.objects.filter(cart__session_key=self.request.session.session_key)
+
+class CartConfirmationView(LoginRequiredMixin, ListView):
+    model = CartItem
+    template_name = 'store/cart_confirmation.html'
+    context_object_name = 'cart_items'
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart__user=self.request.user)
+    
+class CheckoutView(TemplateView):
+    template_name = 'checkout.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_items = self.request.user.cart_items.all() if self.request.user.is_authenticated else []
+        total_price = sum(item.product.price * item.quantity for item in cart_items)
+        context['cart_items'] = cart_items
+        context['total_price'] = total_price
+        context['shipping_form'] = ShippingForm()
+        return context
+
+    def post(self, request):
+        shipping_form = ShippingForm(request.POST)
+
+        if shipping_form.is_valid():
+            cart_items = request.user.cart_items.all() if request.user.is_authenticated else []
+            total_price = sum(item.product.price * item.quantity for item in cart_items)
+            order = Order.objects.create(user=request.user if request.user.is_authenticated else None, total_amount=total_price)
+
+            for item in cart_items:
+                OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
+
+            request.user.cart_items.clear() if request.user.is_authenticated else Cart.objects.filter(session_key=request.session.session_key).delete()
+
+            return redirect('store:order_confirmation')
+
+        else:
+            # Handle invalid forms
+            return render(request, self.template_name, {'shipping_form': shipping_form})
+
+class OrderView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart_items = CartItem.objects.filter(cart__user=self.request.user)
@@ -63,7 +109,7 @@ class CartConfirmationView(LoginRequiredMixin, TemplateView):
         total_price = sum(item.pizza.price * item.quantity for item in cart_items)
         context['total_price'] = total_price
         return context
-    
+
     def post(self, request, *args, **kwargs):
         cart_items = CartItem.objects.filter(cart__user=self.request.user)
         total_amount = 0
@@ -82,7 +128,6 @@ class CartConfirmationView(LoginRequiredMixin, TemplateView):
             )
             total_amount += cart_item.pizza.price * cart_item.quantity
             order_items.append(order_item)
-
         order.items.set(order_items)
 
         cart_items.delete()
@@ -91,14 +136,6 @@ class CartConfirmationView(LoginRequiredMixin, TemplateView):
         cart_queryset.delete()
 
         return redirect('store:order_confirmation') 
-
-class OrderListView(LoginRequiredMixin, ListView):
-    model = Order
-    template_name = 'store/orders.html'
-    context_object_name = 'orders'
-
-    def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).all()
 
 class OrderConfirmationView(LoginRequiredMixin, ListView):
     model = Order
@@ -114,10 +151,27 @@ class OrderConfirmationView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user).last()
 
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'store/orders.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).all()
+
 class RemoveFromCartView(View):
     def post(self, request):
         cart_item_id = request.POST.get('cart_item_id')
         CartItem.objects.filter(id=cart_item_id).delete()
+        return JsonResponse({'success': True})
+
+class UpdateQuantityView(View):
+    def post(self, request):
+        cart_item_id = request.POST.get('cart_item_id')
+        quantity = int(request.POST.get('quantity'))
+        cart_item = CartItem.objects.get(id=cart_item_id)
+        cart_item.quantity = quantity
+        cart_item.save()
         return JsonResponse({'success': True})
 
 class ShippingAddressView(LoginRequiredMixin, CreateView):
