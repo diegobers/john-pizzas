@@ -228,14 +228,6 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APP': {
-            'client_id': '759244171239-p74786c20bpr5sdt5c7ekbnpmjjae9nt.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
-        },
         'SCOPE': [
             'profile',
             'email',
