@@ -1,36 +1,32 @@
 {% extends 'layouts/base.html' %} 
 
-{% load static %}
+{% load django_bootstrap5 grid_tags %}
 
 {% block title %}Carrinho{% endblock %}
 
 
 {% block content %}
-
-
-   <h1>Carrinho</h1>
-    {% if cart_items %}
+<!-- Carrt Section -->
+<section id="cart_items" class="py-1">
+  {% container %}
+    <h1 class="mb-3">Detalhes do Carrinho</h1>
+    {% row %}
+      {% if cart_items %}
         <ul>
-            {% for item in cart_items %}
-                <li>{{ item.pizza.name }} - Qtd: {{ item.quantity }}</li>
-            {% endfor %}
+          {% for item in cart_items %}
+            <li>{{ item.pizza.name }} - Qtd: {{ item.quantity }}</li>
+          {% endfor %}
         </ul>
         <form action="{% url 'store:confirm_cart' %}">
-            {% csrf_token %}
-            <button type="submit">Finalizar Carrinho</button>
+          {% csrf_token %}
+          {% bootstrap_button button_type="submit" content="Fechar Carrinho" %}
         </form>
-    {% else %}
-        <p>Carrinho Vazio...</p>
-    {% endif %}
-
-
-  <hr>
-  <p>session session_key</p>
-  {{ request.session.session_key }}
-  <hr>
-
-  <p> csrf COOCKIES</p>
-  {{ request.COOKIES }}
-  <hr>
-
+      {% else %}
+        {% col 'col-md-12 my-2' %}
+          <p>Carrinho Vázio!</p>
+        {% endcol %}
+      {% endif %}
+    {% endrow %}
+  {% endcontainer %}
+</section>
 {% endblock content %}

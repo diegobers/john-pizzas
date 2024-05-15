@@ -1,29 +1,22 @@
-{% load static %}
+{% load grid_tags static %}
 
-
-<footer class="footer pt-3 ">
-  <div class="container-fluid text-center mt-">
-    <div class="row align-items-center justify-content-lg-between">
-      <div class="col-lg-6 mb-lg-0 mb-4">
-        <div class="copyright text-center text-sm text-muted text-lg-start">
-          &copy; <a href="#" class="font-weight-bold" target="_blank">&copy John Pizzas</a> - by diegobers</div>
-      </div>
-      <div class="col-lg-6">
-        <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-          <li class="nav-item">
-            <a href="#" 
-               class="nav-link text-muted" target="_blank">Download</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" 
-               class="nav-link text-muted" target="_blank">Free Version</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" 
-               class="nav-link text-muted" target="_blank">Support</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</footer>
+<!-- Footer -->
+{% container %}
+  {% row 'pt-5 my-5 justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-5 border-top border-secundary' %}
+    {% col %}
+      <a href="{% url 'store:index' %}" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
+      <img src="{% static 'img/favicon.ico' %}" alt="" class="logo">
+      </a>
+    {% endcol %}
+    {% col %}
+      <h5>Contato</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a href="https://web.whatsapp.com" target="_blank" class="nav-link p-0 text-body-secondary"><i class="fa-brands fa-whatsapp"></i> (48) 99999-9999</a></li>
+        <li class="nav-item mb-2"><a href="mailto:email@admin.com" class="nav-link p-0 text-body-secondary"><i class="fa-solid fa-envelope-circle-check"></i> email@admin.com</a></li>
+      </ul>
+    {% endcol %}
+  {% endrow %}
+{% endcontainer %}
+<div class="pt-2 pb-4 text-center border-top border-secundary">
+  Desenvolvido por <a href="https://github.com/diegobers" target="_blank"><i class="fa-brands fa-github"></i> Diego Bernardi</a>
+</div>
