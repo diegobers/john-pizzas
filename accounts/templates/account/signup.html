@@ -1,50 +1,36 @@
 {% extends 'layouts/base.html' %}
 
-{% load django_bootstrap5 grid_tags socialaccount widget_tweaks %}
+{% load django_bootstrap5 grid_tags socialaccount %}
 
 {% block title %}Faça Seu Cadastro{% endblock %}
 
 
 {% block content %}
 <section>
-	{% container %}
-	  {% row 'justify-content-center' %}
-			{% col 'col-lg-4 col-md-7' %}
-				<div class="card border-0 mb-0">
-					<div class="card-header bg-transparent">
-						<h5 class="text-dark text-center mt-2 mb-3">CCCadastro</h5>
-						<div class="btn-wrapper text-center">
-							{% if process == "connect" %}
-							<a href="{% provider_login_url 'google' %}" class="btn btn-neutral btn-icon btn-sm mb-0">
-				              <i class="fa-brands fa-google"></i> Google
-				            </a>
-			                {% endif %}
-
-						</div>
-					</div>
-					<div class="card-body px-lg-5 pt-0">
-						<div class="text-center text-muted mb-4">
-							<small>Cadastrar Login/Senha </small>
-						</div>
+  {% container 'mt-5' %}
+    {% row 'justify-content-center' %}
+      {% col 'col-lg-4 col-md-6' %}
+        <div class="card border-0 mb-0">
+          <div class="card-header bg-transparent">
+            <div class="text-center">
+              <a href="{% provider_login_url 'google' %}" class="btn btn-neutral btn-icon btn-sm mb-0">
+                <i class="fa-brands fa-google"></i> Google
+              </a>
+              <a href="#" class="btn btn-primary btn-icon btn-sm mb-0">
+                <i class="fa-brands fa-facebook"></i> Facebook
+              </a>
+            </div>
+          </div>
+					<div class="card-body px-lg-5 pt-4">
 						<form class="signup" method="POST" action="{% url 'accounts:signup' %}">
 	            {% csrf_token %}
 	            {% bootstrap_form form %}
-	            {% bootstrap_button button_type="submit" content="OK" %}
+	            {% bootstrap_button button_type="submit" content="Cadastrar" %}
 	          </form>
 					</div>
 				</div>
 		  {% endcol %}
 	  {% endrow %}
-
-	  
-  <hr>
-  <p>session session_key</p>
-  {{ request.session.session_key }}
-  <hr>
-
-  <p> last_session_key</p>
-  {{ request.session.last_session_key }}
-  <hr>
 	{% endcontainer %}
 </section>
 {% endblock content %}
