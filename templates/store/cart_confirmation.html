@@ -1,23 +1,30 @@
 {% extends 'layouts/base.html' %}
 
+{% load django_bootstrap5 grid_tags %}
+
+{% block title %}Confirmar Pedido{% endblock %}
+
 
 {% block content %}
-<h1>Resumo do Pedido</h1>
-
-   <h1>Seu peido </h1>
-    {% if cart_items %}
+<!-- Carrt Section -->
+<section id="cart_items" class="py-1">
+  {% container %}
+    <h1 class="mb-3">Confirmar Pedido!</h1>
+    {% row %}
+      {% if cart_items %}
         <ul>
-            {% for item in cart_items %}
-                <li>{{ item.pizza.name }} - Qtd: {{ item.quantity }}</li>
-            {% endfor %}
-        </ul>
-    <form method="post" action="{% url 'store:view_order' %}">
-        {% csrf_token %}
-        <button type="submit">Finalizar</button>
-    </form>
-    {% else %}
-        <p>Order Vazio...</p>
-    {% endif %}
-
-
-{% endblock %}
+          {% for item in cart_items %}
+            <li>{{ item.pizza.name }} - Qtd: {{ item.quantity }}</li>
+          {% endfor %}
+        </ul> 
+        <form method="post" action="{% url 'store:view_order' %}">
+          {% csrf_token %}
+          {% bootstrap_button button_type="submit" content="Confirmar" %}        
+        </form>
+      {% else %}
+          <p>Pedido vázio...</p>
+      {% endif %}
+    {% endrow %}
+  {% endcontainer %}
+</section>  
+{% endblock content %}
