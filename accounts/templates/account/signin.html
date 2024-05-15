@@ -1,44 +1,36 @@
 {% extends 'layouts/base.html' %}
 
-{% load django_bootstrap5 grid_tags socialaccount widget_tweaks %}
+{% load django_bootstrap5 grid_tags socialaccount %}
 
 {% block title %}Entrar Na Conta{% endblock %}
 
 
 {% block content %} 
 <section>
-
   {% container 'mt-5' %}
     {% row 'justify-content-center' %}
       {% col 'col-lg-4 col-md-6' %}
         <div class="card border-0 mb-0">
           <div class="card-header bg-transparent">
-            <h5 class="text-dark text-center mt-2 mb-3">CusTOMM</h5>
-          
-            <div class="btn-wrapper text-center">
-              <a href="#" class="btn btn-neutral btn-icon btn-sm mb-0">
+            <div class="text-center">
+              <a href="{% provider_login_url 'google' %}" class="btn btn-neutral btn-icon btn-sm mb-0">
                 <i class="fa-brands fa-google"></i> Google
+              </a>
+              <a href="#" class="btn btn-primary btn-icon btn-sm mb-0">
+                <i class="fa-brands fa-facebook"></i> Facebook
               </a>
             </div>
           </div>
           <div class="card-body px-lg-5 pt-0">
-            <div class="text-center text-muted mb-4">
-              <small>Entrar com seu Login</small>
-            </div> 
-            
             <form method="post" class="mt-4">
               {% csrf_token %}
 
               {% bootstrap_field form.login %}
               {% bootstrap_field form.password %}
               {% bootstrap_field form.remember %}
-              
 
               {% bootstrap_button button_type="submit" content="OK" %}
             </form>
-
-
- 
            </div>
         </div>
       {% endcol %}
