@@ -1,22 +1,42 @@
 {% extends 'layouts/base.html' %}
 
+{% load grid_tags %}
+
+{% block title %}Pedidos{% endblock %}
+
 
 {% block content %}
 
-
-
-   <h1>Orders</h1>
-    {% if orders %}
-        <ul>
-            {% for order in orders %}
-                <li>
-                    <a href="{% url 'store:confirm_cart' %}"> ID: {{ order.id }} - Total: {{ order.total_amount }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Nenhum Pedido...</p>
-    {% endif %}
-    
-{% endblock %}
+<!-- Orders Section -->
+<section id="order" class="py-5">
+  {% container %}
+    {% row %}  
+      {% col 'col-sm-12 col-md-6' %}
+        {% if orders %}
+          <h1>Todos os Pedidos!</h1>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Total</th>
+              </tr>
+              </thead>
+              {% for order in orders %}
+                <tr>
+                  <td><h5>{{ order.id }}</h5></td>
+                  <td>{{ order.status }}</td>
+                  <td>{{ order.total }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div> 
+        {% else %}
+            <p>Nenhum Pedido...</p>
+        {% endif %}
+      {% endcol %}
+    {% endrow %}
+  {% endcontainer %}
+</section>
+{% endblock content %}

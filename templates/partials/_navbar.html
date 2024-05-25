@@ -39,14 +39,13 @@
                 <i class="fa-solid fa-lock"></i> Admin
               </a>
             </li>
-          {% else %}
-            <li class='nav-item'>
-              <a class='nav-link' href="{% url 'accounts:view_profile' %}">
-                <i class="fa-solid fa-address-card"></i> Painel
-              </a>
-            </li>          
           {% endif %}
 
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'accounts:view_profile' %}">
+              <i class="fa-solid fa-address-card"></i> Painel
+            </a>
+          </li>          
           
           <li class='nav-item'>
             <li class="nav-item">
