@@ -19,16 +19,17 @@ from allauth.account.forms import (
     ResetPasswordKeyForm,
 )
 
-from .forms import UserProfileForm
+from .forms import UserProfileForm, UpdateProfileForm
 
 
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-
 from .models import JohnPizzaAbstractUserModel
+
 from django.views.generic import (
+    UpdateView,
     CreateView, 
     ListView, 
     TemplateView, 
@@ -37,16 +38,15 @@ from django.views.generic import (
     FormView,
 )
 
-
-class UserProfileView(LoginRequiredMixin, DetailView, FormView):
-    template_name = 'store/dashboard.html'
+class AddressProfileView(LoginRequiredMixin, UpdateView):
+    template_name = 'account/add_address.html'
     context_object_name = 'user'
     form_class = UserProfileForm
-    success_url = reverse_lazy('accounts:edit_profile')
+    success_url = reverse_lazy('accounts:view_profile')
 
     def get_object(self, queryset=None):
         return self.request.user
-    
+
     def get_initial(self):
         # Prefill the form with the current user's data
         initial = super().get_initial()
@@ -55,13 +55,32 @@ class UserProfileView(LoginRequiredMixin, DetailView, FormView):
         })
         return initial
 
-    def form_valid(self, form):
-        user = form.save(commit=False)
-        user = self.request.user
-        user.address = self.request.POST.get('address')
-        print(user.address)
-        user.save()
-        return super().form_valid(form)
+        
+class EditProfileView(LoginRequiredMixin, UpdateView):
+    template_name = 'account/edit_profile.html'
+    context_object_name = 'user'
+    form_class = UpdateProfileForm
+    success_url = reverse_lazy('accounts:view_profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = 'store/dashboard.html'
+    context_object_name = 'user'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+    
+
+    #def form_valid(self, form):
+    #    user = form.save(commit=False)
+    #    user = self.request.user
+    #    user.address = self.request.POST.get('address')
+    #    print(user.address)
+    #    user.save()
+    #    return super().form_valid(form)
 
 
 

@@ -22,7 +22,6 @@ class CustomAllAuthLoginForm(LoginForm):
 
         self.fields['password'].help_text = mark_safe('<a href=recuperar-senha/>Recuperar Senha?</a>')
 
-
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
@@ -35,3 +34,8 @@ class UserProfileForm(forms.ModelForm):
         #for field in self.fields:
         #    self.fields[field].widget.attrs['class'] = 'form-control'
         
+class UpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'phone_number']
+        exclude = ['password']

@@ -2,7 +2,9 @@ from django.urls import path, re_path
 
 from allauth.account.views import LogoutView
 from accounts.views import (
-    UserProfileView,
+    ProfileView,
+    AddressProfileView,
+    EditProfileView,
     CustomLoginView, 
     CustomSignupView, 
     ResetPasswordView,
@@ -19,7 +21,11 @@ urlpatterns = [
     #path('login_or_signup/', login_or_signup, name='login_or_signup'),
     path('sair/', LogoutView.as_view(), name='logout'),
 
-    path('edit_profile/', UserProfileView.as_view(), name='edit_profile'),
+    path('view_profile/', ProfileView.as_view(), name='view_profile'),
+    
+    path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
+    
+    path('add_address/', AddressProfileView.as_view(), name='add_address'),
 
 
 
