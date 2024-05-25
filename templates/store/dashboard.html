@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %} 
 
 {% load account static %}
+{% load django_bootstrap5 grid_tags %}
 
 {% block title %}Painel{% endblock %}
 
@@ -10,14 +11,17 @@
 
    <h1>Painel</h1>
 
-    {{ user }}
+   <p>{{ user }}</p>    
+   <p>{{ user.email}}</p>    
 
 
-    {{ request.user.phone_number }}
-    
-    {{ user }}
-
-
+          
+      <form method="post">
+         
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          {% bootstrap_button button_type="submit" content="Finalizar" %} 
+      </form>
   <hr>
   <p>session session_key</p>
   {{ request.session.session_key }}

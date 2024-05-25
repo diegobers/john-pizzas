@@ -4,6 +4,8 @@ from store.models import Cart
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 #from django.views.generic.base import TemplateView, View
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
@@ -16,6 +18,52 @@ from allauth.account.forms import (
     ResetPasswordForm,
     ResetPasswordKeyForm,
 )
+
+from .forms import UserProfileForm
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+from .models import JohnPizzaAbstractUserModel
+from django.views.generic import (
+    CreateView, 
+    ListView, 
+    TemplateView, 
+    View, 
+    DetailView,
+    FormView,
+)
+
+
+class UserProfileView(LoginRequiredMixin, DetailView, FormView):
+    template_name = 'store/dashboard.html'
+    context_object_name = 'user'
+    form_class = UserProfileForm
+    success_url = reverse_lazy('accounts:edit_profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+    
+    def get_initial(self):
+        # Prefill the form with the current user's data
+        initial = super().get_initial()
+        initial.update({
+            'address': self.request.user.address,
+        })
+        return initial
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user = self.request.user
+        user.address = self.request.POST.get('address')
+        print(user.address)
+        user.save()
+        return super().form_valid(form)
+
+
 
 
 class ResetPasswordView(PasswordResetView):
@@ -93,5 +141,6 @@ class CustomLoginView(LoginView):
             cart.session_key = None
             cart.save()
             del self.request.session['last_session_key']
-        
+            #messages.success(request, ("Update Cart Items..."))
+
         return response

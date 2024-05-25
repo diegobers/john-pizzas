@@ -2,6 +2,7 @@ from django.urls import path, re_path
 
 from allauth.account.views import LogoutView
 from accounts.views import (
+    UserProfileView,
     CustomLoginView, 
     CustomSignupView, 
     ResetPasswordView,
@@ -17,6 +18,10 @@ urlpatterns = [
     path('', CustomLoginView.as_view(), name='login'),
     #path('login_or_signup/', login_or_signup, name='login_or_signup'),
     path('sair/', LogoutView.as_view(), name='logout'),
+
+    path('edit_profile/', UserProfileView.as_view(), name='edit_profile'),
+
+
 
     # password reset
     path('recuperar-senha/', ResetPasswordView.as_view(), name="reset_password"),
