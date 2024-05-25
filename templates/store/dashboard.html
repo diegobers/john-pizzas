@@ -7,28 +7,73 @@
 
 
 {% block content %}
+<!-- Dashboard Section -->
+<section id="user-dashboard" class="py-5">
+  {% container %}
+    {% row 'row-cols-1 row-cols-sm-2 justify-content-center' %}
 
+      {% col 'col-lg-4' %}
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="{{ user.photo.url }}" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h2 class="my-3">{{ user.first_name}}</h2>
+            <p class="text-muted mb-4">{{ user.email }}</p>
+            <div class="d-flex justify-content-center mb-2">
+              <a href="{% url 'accounts:edit_profile' %}" class="btn btn-primary">Editar Usuário</a>
+              <a href="{% url 'accounts:add_address' %}" class="btn btn btn-outline-primary ms-1">Alterar Endereço</a> 
+            </div>
+          </div>
+        </div>
+      {% endcol %}
 
-   <h1>Painel</h1>
+      {% col 'col-lg-8' %}
+        <div class="card mb-4">
+          <div class="card-body">
+            {% row %}
+              {% col 'col-sm-3' %}
+                <p class="mb-0">Nome</p>
+              {% endcol %}
 
-   <p>{{ user }}</p>    
-   <p>{{ user.email}}</p>    
+              {% col 'col-sm-9' %}
+                <p class="text-muted mb-0">{{ user.first_name }}</p>
+              {% endcol %}
+            {% endrow %}
+            <hr>
+            {% row %}
+              {% col 'col-sm-3' %}
+                <p class="mb-0">Email</p>
+              {% endcol %}
+              
+              {% col 'col-sm-9' %}
+                <p class="text-muted mb-0">{{ user.email }}</p>
+              {% endcol %}
+            {% endrow %}
+            <hr>
+            {% row %}
+              {% col 'col-sm-3' %}
+                <p class="mb-0">Telefone</p>
+              {% endcol %}
+        
+              {% col 'col-sm-9' %}
+                <p class="text-muted mb-0">{{ user.phone_number }}</p>
+              {% endcol %}
+            {% endrow %}
+            <hr>
+            {% row %}
+              {% col 'col-sm-3' %}
+                <p class="mb-0">Endereço</p>
+              {% endcol %}
+              
+              {% col 'col-sm-9' %}
+                <p class="text-muted mb-0">{{ user.address }}</p>
+              {% endcol %}
+            {% endrow %}
+          </div>
+        </div>
+      {% endcol %}
 
-
-          
-      <form method="post">
-         
-          {% csrf_token %}
-          {% bootstrap_form form %}
-          {% bootstrap_button button_type="submit" content="Finalizar" %} 
-      </form>
-  <hr>
-  <p>session session_key</p>
-  {{ request.session.session_key }}
-  <hr>
-
-  <p> csrf COOCKIES</p>
-  {{ request.COOKIES }}
-  <hr>
-
+    {% endrow %}
+  {% endcontainer %}
+</section>
 {% endblock content %}
