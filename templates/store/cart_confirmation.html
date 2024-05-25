@@ -39,7 +39,7 @@
                 {% endfor %}             
               </tbody>
             </table> 
-          </div>
+          </div>          
         {% else %}
           <p>Carrinho Vázio...</p>
         {% endif %}
@@ -47,8 +47,9 @@
 
       {% col 'col-4 my-2' %}
       <h3>Resumo Carrinho</h3>
-        <form method="post" action="{% url 'store:view_order' %}">
+        <form method="post">
           {% csrf_token %}
+          {% bootstrap_form form %}
           {% bootstrap_button button_type="submit" content="Finalizar" %}        
         </form>
       {% endcol %}
