@@ -1,5 +1,11 @@
 from django import forms
-from .models import Order
+from .models import Order, Pizza
+
+
+class PizzaForm(forms.ModelForm):
+    class Meta:
+        model = Pizza
+        fields = ['name', 'price']
 
 
 class CheckoutForm(forms.ModelForm):

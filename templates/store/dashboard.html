@@ -11,7 +11,6 @@
 <section id="user-dashboard" class="py-5">
   {% container %}
     {% row 'row-cols-1 row-cols-sm-2 justify-content-center' %}
-
       {% col 'col-lg-4' %}
         <div class="card mb-4">
           <div class="card-body text-center">
@@ -22,6 +21,10 @@
             <div class="d-flex justify-content-center mb-2">
               <a href="{% url 'accounts:edit_profile' %}" class="btn btn-primary">Editar Usuário</a>
               <a href="{% url 'accounts:add_address' %}" class="btn btn btn-outline-primary ms-1">Alterar Endereço</a> 
+              {% if request.user.is_superuser %}
+                <a href="{% url 'store:add_pizza' %}" class="btn btn-primary">Add Pizza</a>
+              {% endif %}
+
             </div>
           </div>
         </div>

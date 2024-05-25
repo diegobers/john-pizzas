@@ -8,6 +8,7 @@ urlpatterns = [
   path('', views.IndexView.as_view(), name='index'),
   path('pizzas/', views.PizzaListView.as_view(), name='view_pizzas'),
   path('add-cart/', views.AddToCartView.as_view(), name='add_cart'),
+  path('add-pizza/', views.PizzaCreateView.as_view(), name='add_pizza'),
   #path('dashboard/', views.UserProfileDetailView.as_view(), name='dashboard'),
 
   path('cart/', views.CartView.as_view(), name='view_cart'),
