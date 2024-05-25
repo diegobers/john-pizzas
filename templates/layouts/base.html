@@ -18,15 +18,13 @@
     <title>{% block title %}{% endblock title %}</title>
   </head>
   <body>
-
-  {% include 'partials/_navbar.html' %}  
+    {% include 'partials/_navbar.html' %}  
   
-  <main class="main-content light-grey">
-    {% include 'partials/_alerts.html' %}  
+    <main class="main-content light-grey">
+      {% include 'partials/_alerts.html' %}  
 
-    {% block content %}
-    {% endblock content %}
-    
+      {% block content %}
+      {% endblock content %}
     </main>
 
     {% include 'partials/_footer.html' %}

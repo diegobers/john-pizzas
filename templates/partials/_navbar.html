@@ -1,7 +1,9 @@
-<!-- NavBar -->
 {% load grid_tags static %}
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" aria-label="Template Navbar">
+
+{% containerfluid %}
+<!-- NavBar -->
+  <nav class="navbar navbar-expand-lg bg-body-white sticky-top mx-5" aria-label="Template Navbar">
     <a class="navbar-brand" href="{% url 'store:index' %}">
       <img src="{% static 'img/logo.jpeg' %}" alt="" style="width: 120px;" class="logo">
     </a>
@@ -39,7 +41,7 @@
             </li>
           {% else %}
             <li class='nav-item'>
-              <a class='nav-link' href="{% url 'accounts:edit_profile' %}">
+              <a class='nav-link' href="{% url 'accounts:view_profile' %}">
                 <i class="fa-solid fa-address-card"></i> Painel
               </a>
             </li>          
@@ -70,4 +72,5 @@
         {% endif %}
       </ul>
     </div>
-</nav>
+  </nav>
+{% endcontainer %}
