@@ -10,7 +10,7 @@
 <!-- Dashboard Section -->
 <section id="user-dashboard" class="py-5">
   {% container %}
-    {% row 'row-cols-1 row-cols-sm-2 justify-content-center' %}
+    {% row 'justify-content-center' %}
       {% col 'col-lg-4' %}
         <div class="card mb-4">
           <div class="card-body text-center">
@@ -24,20 +24,15 @@
               {% if request.user.is_superuser %}
                 <a href="{% url 'store:add_pizza' %}" class="btn btn-primary">Add Pizza</a>
               {% endif %}
-
             </div>
           </div>
         </div>
-      {% endcol %}
-
-      {% col 'col-lg-8' %}
         <div class="card mb-4">
           <div class="card-body">
             {% row %}
               {% col 'col-sm-3' %}
                 <p class="mb-0">Nome</p>
               {% endcol %}
-
               {% col 'col-sm-9' %}
                 <p class="text-muted mb-0">{{ user.first_name }}</p>
               {% endcol %}
@@ -75,7 +70,31 @@
           </div>
         </div>
       {% endcol %}
-
+      {% col 'col-lg-8' %}
+        {% if orders %}
+          <h1>Seus Pedidos...</h1>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Total</th>
+              </tr>
+              </thead>
+              {% for order in orders %}
+                <tr>
+                  <td><h5>{{ order.id }}</h5></td>
+                  <td>{{ order.status }}</td>
+                  <td>{{ order.total }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div> 
+        {% else %}
+            <p>Nenhum Pedido...</p>
+        {% endif %}
+      {% endcol %}
     {% endrow %}
   {% endcontainer %}
 </section>

@@ -9,20 +9,10 @@
 <!-- Order Section -->
 <section id="order" class="py-5">
   {% container %}
-    {% row %}  
-      {% col 'col-sm-12' %}
-        <h2>Pedido Confirmado!!!</h2>
-      {% endcol %}
-    {% endrow %}
-    
-    {% row %}  
-      {% col 'col-sm-12' %}
-        <h3>Obrigado! Seu pedido está sendo processado.</h3> <br/>
-      {% endcol %}
-    {% endrow %}
-
-    {% row %}  
+    {% row 'justify-content-center' %}  
       {% col 'col-sm-12 col-md-6' %} 
+        <h2>Pedido Confirmado!!!</h2>
+        <h3>Obrigado! Seu pedido está sendo processado.</h3> <br/>
         <h4>ID Pedido: #{{ order.id }} </h4>
         <div class="table-responsive">
           <table class="table table-striped">

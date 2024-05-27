@@ -39,21 +39,35 @@
                 {% endfor %}             
               </tbody>
             </table> 
-          </div>          
+          </div>
+          <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% bootstrap_button button_type="submit" content="Finalizar" %}        
+          </form>
         {% else %}
           <p>Carrinho Vázio...</p>
         {% endif %}
       {% endcol %}
-
       {% col 'col-4 my-2' %}
-      <h3>Resumo Carrinho</h3>
-        <form method="post">
-          {% csrf_token %}
-          {% bootstrap_form form %}
-          {% bootstrap_button button_type="submit" content="Finalizar" %}        
-        </form>
+        <h3>Resumo Carrinho</h3>
+        <div class="card mb-4">
+          <div class="card-body">
+            {% row %}
+              {% for item in cart_items %}
+                {% col 'col-sm-3' %}
+                  <p class="mb-0">{{ item.pizza.name }}</p>
+                {% endcol %}
+                {% col 'col-sm-9' %}
+                  <p class="mb-0">{{ item.quantity }}</p>
+                {% endcol %}
+              {% endfor %}
+            {% endrow %}
+            <hr>
+            <p>Total: R$ </p>
+          </div>
+        </div>
       {% endcol %}
-
     {% endrow %}
   {% endcontainer %}
 </section>  
