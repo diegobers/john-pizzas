@@ -1,6 +1,6 @@
 from allauth.account.views import LoginView, SignupView
 from django.urls import reverse_lazy
-from store.models import Cart
+from store.models import Cart, Order
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 #from django.views.generic.base import TemplateView, View
@@ -73,16 +73,11 @@ class ProfileView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return self.request.user
     
-
-    #def form_valid(self, form):
-    #    user = form.save(commit=False)
-    #    user = self.request.user
-    #    user.address = self.request.POST.get('address')
-    #    print(user.address)
-    #    user.save()
-    #    return super().form_valid(form)
-
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        orders = Order.objects.filter(user=self.request.user)
+        context['orders'] = orders
+        return context
 
 
 class ResetPasswordView(PasswordResetView):

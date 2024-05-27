@@ -67,8 +67,6 @@ class AddToCartView(View):
         cart_item.quantity += 1
         cart_item.save()
         
-        messages.success(request, ("Pizza Add To Cart..."))
-
         return redirect('store:view_cart')
 
 
