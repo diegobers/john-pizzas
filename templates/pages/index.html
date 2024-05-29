@@ -10,27 +10,32 @@
 <section id="pizzas" class="py-1">
   {% container %}
     <h3 class="text-center mb-3">Pizzas</h3>
-    {% row %}
+    {% row 'd-flex justify-content-center' %}
       {% if pizzas %}
-        {% for pizza in pizzas %}
-          {% col 'col-sm-4 col-md-4 col-lg-4 col-xl-4 my-2' %}
-            <div class="card w-100 mx-auto shadow" href="#" style="width: 18rem;">
-              <img src="{{ pizza.photo_main.url }}" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">{{ pizza.name }}</h5>
-                <p class="card-text">{{ pizza.price }}</p>
-                <form method="post" action="{% url 'store:add_cart' %}">
-                  {% csrf_token %}
-                  <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
-                  {% bootstrap_button button_type="submit" content="Comprar" %}
-                </form>
-              </div>
-            </div>  
-          {% endcol %}
-        {% endfor %}
+        {% col 'col-sm-6' %}
+          {% for pizza in pizzas %}
+              <div class="card w-100 mx-auto shadow my-5" href="#" style="width: 228rem;">
+                <img src="{{ pizza.photo_main.url }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{ pizza.name }}</h5>
+                  <p class="card-text">{{ pizza.price }}</p>
+                  <form method="post" action="{% url 'store:add_cart' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
+                    {% bootstrap_button button_type="submit" content="Comprar" %}
+                  </form>
+                </div>
+              </div>  
+          {% endfor %}
+        {% endcol %}
       {% else %}
         {% col 'col-md-12 my-2' %}
-          <p>Pizzas Indisponiveis!!!</p>
+
+          <i class="fa-solid fa-cart-arrow-down"></i>
+          <h2>Seu carrinho está vazio!</h2>
+          <small>Você ainda não possui itens no seu carrinho.</small>
+          <a class="btn btn-primary" href="{% url 'store:index' %}">Ver produtos</a>
+
         {% endcol %}
       {% endif %}
     {% endrow %}
