@@ -22,13 +22,15 @@ class CartItem(models.Model):
 
 class Order(models.Model):
     ORDER_STATUS  = [
-        ('received','received'),
-        ('delivered','delivered'),
+        ('received','Recebido'),
+        ('inprogress','Preparando'),
+        ('delivered','Entregue'),
+        ('canceled','Cancelado'),
     ]
     
     PAYMENT_METHOD_CHOICES = [
-        ('cash','cash'),
-        ('card','card'),
+        ('cash','Dinheiro'),
+        ('card','Cartão'),
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -44,18 +46,3 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-
-
-
-class Shipping(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    address = models.CharField(max_length=255)
-    shipping_price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
-
-class Payment(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    transaction_id = models.CharField(max_length=100)
-    payment_date = models.DateTimeField(auto_now_add=True)
-
-
-#class Checkout(models.Model):

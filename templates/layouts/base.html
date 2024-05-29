@@ -17,15 +17,14 @@
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
     <title>{% block title %}{% endblock title %}</title>
   </head>
-  <body>
+  <body class="bg-body-tertiary">
     {% include 'partials/_navbar.html' %}  
   
-    <main class="main-content light-grey">
-      {% include 'partials/_alerts.html' %}  
+    {% include 'partials/_alerts.html' %}  
+    
+    {% block content %}
+    {% endblock content %}
 
-      {% block content %}
-      {% endblock content %}
-    </main>
 
     {% include 'partials/_footer.html' %}
     
