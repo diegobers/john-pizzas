@@ -9,12 +9,12 @@
 <!-- Cart Section -->
 <section class="py-4">
   {% container %}
-    {% row %}
-      {% col 'col-12 text-start' %}
-        <h3 class="mt-2">Meu Carrinho</h3>
-      {% endcol %}
-    {% endrow %}
     {% if cart_items %}
+      {% row %}
+        {% col 'col-12 text-start' %}
+          <h3 class="mt-2">Meu Carrinho</h3>
+        {% endcol %}
+      {% endrow %}
       {% row 'gx-3' %}
         {% col 'col-12 col-md-7' %}
           <!-- Cart Items List -->
@@ -63,22 +63,29 @@
                     </span>
                   </li>
                 </ul>
-              <a class="btn btn-dark w-100 my-4" href="{% url 'store:confirm_cart' %}">Finalizar Carrinho</a>
-              <a class="btn btn-link btn-sm px-0 text-body" href="#">Continuar Comprando</a>
+              <a class="btn btn-dark w-75 mt-4 mb-2" href="{% url 'store:confirm_cart' %}">Finalizar Carrinho</a>
+              <a class="btn btn-link px-0 text-body" href="{% url 'store:index' %}">Continuar Comprando</a>
             </div>
           </div>
         {% endcol %}
       {% endrow %}
     {% else %}
-      {% row 'd-flex justify-content-center' %}
-        {% col 'col-md-8 my-2' %}
+    <!-- Cart -->
+      {% row 'd-flex justify-content-center mt-5' %}
+        {% col 'col-md-8 my-2 text-center' %}
           <img src="{% static 'icons/cart-x.svg' %}" width="64" height="64" alt="Carrinho Vazio">         
-          <h2>Seu carrinho está vazio!</h2>
+          <h2 class="mt-2">Seu carrinho está vazio!</h2>
           <small>Você ainda não possui itens no seu carrinho.</small>
-          <a class="btn btn-primary" href="{% url 'store:index' %}">Ver produtos</a>
         {% endcol %}
       {% endrow %}
+          
+      {% row 'd-flex justify-content-center mb-5' %}
+        {% col 'col-md-8 my-2 text-center' %}
+          <a class="btn btn-dark text-center w-25" href="{% url 'store:index' %}">Adicionar</a>
+        {% endcol %}
+      {% endrow %}
+
     {% endif %}
   {% endcontainer %}
-</section>
 {% endblock content %}
+</section>
