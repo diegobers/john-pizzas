@@ -7,37 +7,41 @@
 
 {% block content %}
 <!-- Pizzas Section -->
-<section id="pizzas" class="py-2">
+<section id="pizzas">
   {% container %}
-    {% row 'd-flex justify-content-center' %}
       {% if pizzas %}
-        {% col 'col-sm-6' %}
-          {% for pizza in pizzas %}
-              <div class="card w-100 mx-auto shadow my-5" href="#" style="width: 228rem;">
+        {% row 'd-flex justify-content-center mx-4' %}
+          {% col 'col-sm-12 col-md-10 col-lg-8' %}
+            {% for pizza in pizzas %}
+              <div class="card w-100 mx-auto shadow" href="#" style="width: 228rem;">
                 <img src="{{ pizza.photo_main.url }}" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title">{{ pizza.name }}</h5>
                   <p class="card-text">{{ pizza.price }}</p>
-                  <form method="post" action="{% url 'store:add_cart' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
-                    {% bootstrap_button button_type="submit" content="Comprar" %}
-                  </form>
                 </div>
               </div>  
-          {% endfor %}
-        {% endcol %}
+              <div class="text-center mt-4 mb-4 pb-4 border-bottom border-2">
+                <form method="post" action="{% url 'store:add_cart' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
+                  {% bootstrap_button button_class="btn btn-dark" button_type="submit" content="Comprar" %}
+                </form>
+              </div>
+            {% endfor %}
+          {% endcol %}
+        {% endrow %}
+      
       {% else %}
-        {% col 'col-md-12 my-2' %}
+        {% row 'd-flex justify-content-center mx-4' %}
+          {% col 'col-10 my-2' %}
 
           <i class="fa-solid fa-cart-arrow-down"></i>
           <h2>Seu carrinho está vazio!</h2>
           <small>Você ainda não possui itens no seu carrinho.</small>
           <a class="btn btn-primary" href="{% url 'store:index' %}">Ver produtos</a>
-
-        {% endcol %}
+          {% endcol %}
+        {% endrow %}
       {% endif %}
-    {% endrow %}
   {% endcontainer %}
 </section>
 {% endblock content %}
