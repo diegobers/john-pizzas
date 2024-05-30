@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% load grid_tags %}
+{% load grid_tags static %}
 
 {% block title %}Pedido Confirmado{% endblock %}
 
@@ -11,40 +11,14 @@
   {% container %}
     {% row 'justify-content-center' %}  
       {% col 'col-12 col-md-10 col-lg-8 col-xl-6 text-center' %}
-        <!-- Img -->
-        <img class="img-fluid" src="{{ order_items.pizza.photo_main.url }}" width="128" height="128" alt="Carrinho Item Imagem">
+        <!-- Img SVG -->
+        <img src="{% static 'icons/cart-check.svg' %}" width="128" height="128" alt="Pedido Confirmado" class="img-fluid" >
+
+        <h2 class="mt-4 mb-2">Pedido Confirmado!!!</h2>
+        <p>Obrigado! Seu pedido está sendo preparado.</p>
+        <a class="btn btn-dark w-50 my-2" href="{% url 'accounts:view_profile' %}">Meus Pedidos</a>
       {% endcol %}
     {% endrow %}
-  
-    <h2>Pedido Confirmado!!!</h2>
-    <h3>Obrigado! Seu pedido está sendo processado.</h3> <br/>
-    <h4>ID Pedido: #{{ order.id }} </h4>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Preço</th>
-          <th colspan="1" class="text-center">Qtd</th>
-          <th>Status</th>
-          <th>Entrega</th>
-          <th>Total</th>
-          <th>Obs</th>
-        </tr>
-        </thead>
-        {% for item in order_items %}
-          <tr>
-            <td><h5>{{ item.pizza.name }}</h5></td>
-            <td>{{ item.pizza.price }}</td>
-            <td class="text-center" width="100">{{ item.quantity }}</td>
-            <td>{{ item.order.status }}</td>
-            <td>{{ item.order.shipping_address }}</td>
-            <td>{{ item.order.total }}</td>
-            <td>{{ item.order.observation }}</td>
-          </tr>
-        {% endfor %}
-      </table>
-    </div>   
   {% endcontainer %}
 </section>
 {% endblock content %}
