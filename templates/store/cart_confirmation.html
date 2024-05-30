@@ -1,70 +1,74 @@
 {% extends 'layouts/base.html' %}
 
-{% load django_bootstrap5 grid_tags %}
+{% load django_bootstrap5 grid_tags static %}
 
 {% block title %}Confirmar Pedido{% endblock %}
 
 
 {% block content %}
 <!-- Cart Confirm Section -->
-<section id="cart_confirm" class="py-1">
+<section class="py-4">
   {% container %}
-    <h1 class="mb-3">Confirmar Carrinho</h1>
     {% row %}
-      {% col 'col-8 my-2' %}
-        <h1 class="mb-3">Items</h1>
-        {% if cart_items %}
-          <div class="table-responsive">
-            <table class='table table-striped table-sm table-md table-lg table-xl'> 
-              <thead>
-                <tr>
-                  <th>Descrição</th>
-                  <th>Qtd</th>
-                  <th>Valor</th>
-                </tr> 
-              </thead>  
-              <tbody>
-                {% for item in cart_items %}
-                  <tr>
-                    <td>
-                      <p>{{ item.pizza.name }}</p>
-                    </td>
-                    <td>
-                      <p>{{ item.quantity }}</p>
-                    </td>
-                    <td>
-                      <p>{{ item.pizza.price }}</p>
-                    </td> 
-                  </tr>
-                {% endfor %}             
-              </tbody>
-            </table> 
-          </div>
-          <form method="post">
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            {% bootstrap_button button_type="submit" content="Finalizar" %}        
-          </form>
-        {% else %}
-          <p>Carrinho Vázio...</p>
-        {% endif %}
+      {% col 'col-12' %}
+        <h3 class="mb-5 text-start">Confirmar Pedido</h3>
       {% endcol %}
-      {% col 'col-4 my-2' %}
-        <h3>Resumo Carrinho</h3>
-        <div class="card mb-4">
-          <div class="card-body">
-            {% row %}
-              {% for item in cart_items %}
-                {% col 'col-sm-3' %}
-                  <p class="mb-0">{{ item.pizza.name }}</p>
-                {% endcol %}
-                {% col 'col-sm-9' %}
-                  <p class="mb-0">{{ item.quantity }}</p>
-                {% endcol %}
-              {% endfor %}
-            {% endrow %}
-            <hr>
-            <p>Total: R$ </p>
+    {% endrow %}
+    {% row 'gx-3' %}
+      {% col 'col-12 col-md-7' %}
+        <!-- Cart Items List -->
+        <ul class="list-group list-group-lg list-group-flush mb-6">
+          {% for item in cart_items %}                
+          <li class="list-group-item">
+            <div class="row align-items-center">
+              <div class="col-3">
+                <!-- Img -->
+                <img class="img-fluid" src="{{ item.pizza.photo_main.url }}" width="128" height="128" alt="Carrinho Item Imagem">
+              </div>
+              <div class="col">
+                <!-- Product Description -->
+                <div class="d-flex mb-2 fw-bold">
+                  <h5 class="text-body">{{ item.pizza.name }}</h5>
+                  <span class="ms-auto">{{ item.pizza.price }}</span>
+                </div>
+                <!-- Form Footer -->
+                <div class="d-flex align-items-center">
+                  <p class="mt-7 fs-sm text-muted">Qtd:{{ item.quantity }}</p>
+                  <a class="fs-xs text-gray-400 ms-auto" href="#">
+                    <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Carrinho Vazio"> 
+                    Excluir
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      {% endcol %}
+      {% col 'col-12 col-md-5 col-lg-4 offset-lg-1' %}
+        <div class="card text-center mb-3 border-0 bg-light">
+          <div class="card-body pt-0">
+            <h4 class="card-title fs-lg fw-bold mb-3">Resumo</h4>
+              <ul class="list-group list-group-sm">
+                {% for item in cart_items %}                
+                  <li class="list-group-item d-flex">
+                    <span>{{ item.pizza.name }}</span>
+                    <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
+                  </li>
+                {% endfor %}                
+                <li class="list-group-item d-flex fs-lg fw-bold">
+                  <span>Subtotal: R$</span>
+                  <span class="ms-auto fs-sm">{{ cart_total }}
+                  </span>
+                </li>
+              </ul>
+              <div class="mt-4">              
+                <form method="post">
+                  {% csrf_token %}
+                  {% bootstrap_form form %}
+                  {% bootstrap_button button_type="submit" class="btn btn-dark w-100" content="Finalizar Pedido" %}        
+                </form>
+              </div>
           </div>
         </div>
       {% endcol %}
