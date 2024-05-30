@@ -24,16 +24,19 @@ class IndexView(TemplateView):
         context['pizzas'] = Pizza.objects.all()
         return context
 
+
 class PizzaCreateView(CreateView):
     model = Pizza
     template_name = 'store/add_product.html'
     form_class = PizzaForm
     success_url = reverse_lazy('store:index')
 
+
 class PizzaListView(ListView):
     model = Pizza
     template_name = 'store/pizza_list.html'
     context_object_name = 'pizzas'
+
 
 class CartView(ListView):
     model = CartItem
@@ -46,6 +49,23 @@ class CartView(ListView):
 
         elif self.request.user.is_anonymous:
             return CartItem.objects.filter(cart__session_key=self.request.session.session_key)
+    
+    #def get_queryset(self):
+    #    if self.request.user.is_authenticated:
+    #        return CartItem.objects.filter(cart__user=self.request.user)
+    #    else:
+    #        session_key = self.request.session.session_key
+    #        if not session_key:
+    #            self.request.session.save()  # Ensure the session is saved and has a session key
+    #            session_key = self.request.session.session_key
+    #        return CartItem.objects.filter(cart__session_key=session_key)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = self.get_queryset().first().cart if self.get_queryset().exists() else None
+        context['cart_total'] = cart.get_cart_total if cart else 0
+        return context
+
 
 class AddToCartView(View):
     def post(self, request, *args, **kwargs):

@@ -10,15 +10,26 @@ class Pizza(models.Model):
     def __str__(self):
         return self.name
 
+
 class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     session_key = models.CharField(max_length=40, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def get_cart_total(self):
+        return sum(item.get_cart_item_subtotal for item in self.items.all())
+
+
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
     pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
+    
+    @property
+    def get_cart_item_subtotal(self):
+        return self.pizza.price * self.quantity
+    
 
 class Order(models.Model):
     ORDER_STATUS  = [
@@ -41,6 +52,7 @@ class Order(models.Model):
     shipping_address = models.CharField(max_length=255)
     payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='card')
     status = models.CharField(max_length=10, choices=ORDER_STATUS, default='received')
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
