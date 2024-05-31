@@ -19,6 +19,38 @@
         <a class="btn btn-dark w-50 my-2" href="{% url 'accounts:view_profile' %}">Meus Pedidos</a>
       {% endcol %}
     {% endrow %}
+
+
+    <!-- 
+    <h4>ID Pedido: #{{ order.id }} </h4>
+    <h2>Pedido Confirmado!!!</h2>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Preço</th>
+          <th colspan="1" class="text-center">Qtd</th>
+          <th>Status</th>
+          <th>Entrega</th>
+          <th>Total</th>
+          <th>Obs</th>
+        </tr>
+        </thead>
+        {% for item in order_items %}
+          <tr>
+            <td><h5>{{ item.pizza.name }}</h5></td>
+            <td>{{ item.pizza.price }}</td>
+            <td class="text-center" width="100">{{ item.quantity }}</td>
+            <td>{{ item.order.status }}</td>
+            <td>{{ item.order.shipping_address }}</td>
+            <td>{{ item.order.total }}</td>
+            <td>{{ item.order.observation }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>   
+    -->
   {% endcontainer %}
 </section>
 {% endblock content %}
