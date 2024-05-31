@@ -35,9 +35,8 @@
                   <!-- Form Footer -->
                   <div class="d-flex align-items-center">
                     <p class="mt-7 fs-sm text-muted">Qtd:{{ item.quantity }}</p>
-                    <a class="fs-xs text-gray-400 ms-auto" href="#">
+                    <a class="ms-auto" href="#">
                       <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Carrinho Vazio"> 
-                      Excluir
                     </a>
                   </div>
                 </div>
@@ -64,7 +63,7 @@
                   </li>
                 </ul>
               <a class="btn btn-dark w-75 mt-4 mb-2" href="{% url 'store:confirm_cart' %}">Finalizar Carrinho</a>
-              <a class="btn btn-link px-0 text-body" href="{% url 'store:index' %}">Continuar Comprando</a>
+              <a class="btn btn-link px-0 text-body" href="{% url 'store:index' %}">Continuar Compra</a>
             </div>
           </div>
         {% endcol %}
