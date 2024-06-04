@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %} 
 
-{% load django_bootstrap5 grid_tags %}
+{% load django_bootstrap5 grid_tags static %}
 
 {% block title %}John Pizzas Napolitanas{% endblock %}
 
@@ -30,17 +30,23 @@
             {% endfor %}
           {% endcol %}
         {% endrow %}
-      
       {% else %}
-        {% row 'd-flex justify-content-center mx-4' %}
-          {% col 'col-10 my-2' %}
-
-          <i class="fa-solid fa-cart-arrow-down"></i>
-          <h2>Seu carrinho está vazio!</h2>
-          <small>Você ainda não possui itens no seu carrinho.</small>
-          <a class="btn btn-primary" href="{% url 'store:index' %}">Ver produtos</a>
+        <!-- Null Cart -->
+        {% row 'd-flex justify-content-center mt-5' %}
+          {% col 'col-md-8 my-2 text-center' %}
+            <img src="{% static 'icons/cart-x.svg' %}" width="64" height="64" alt="Sem Produtos">         
+            <h2 class="mt-2">Sem Produtos :(</h2>
+            <small>Ainda não foi cadastrado produtos nesta loja!!!</small>
           {% endcol %}
         {% endrow %}
+        <!-- Admin Add Product -->
+        {% if request.user.is_superuser %}
+          {% row 'd-flex justify-content-center mb-5' %}
+            {% col 'col-md-8 my-2 text-center' %}
+              <a class="btn btn-dark w-50" href="{% url 'store:add_pizza' %}">Adicionar Produto</a>
+            {% endcol %}
+          {% endrow %}
+        {% endif %} 
       {% endif %}
   {% endcontainer %}
 </section>
