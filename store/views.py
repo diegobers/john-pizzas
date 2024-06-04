@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Pizza, Cart, CartItem, Order, OrderItem
 from django.http import JsonResponse
-from .forms import CheckoutForm, PizzaForm
+from .forms import CartCheckoutForm, PizzaForm
 
 
 class IndexView(TemplateView):
@@ -85,13 +85,12 @@ class AddToCartView(View):
         
         return redirect('store:view_cart')
 
-class CartConfirmationView(LoginRequiredMixin, ListView, FormView):
-    template_name = 'store/cart_confirmation.html'
+class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
+    template_name = 'store/cart_checkout.html'
     context_object_name = 'cart_items'
-    form_class = CheckoutForm
+    form_class = CartCheckoutForm
     success_url = reverse_lazy('store:order_confirmation')
 
-    
     def get_queryset(self):
         return CartItem.objects.filter(cart__user=self.request.user)
 
@@ -126,6 +125,56 @@ class CartConfirmationView(LoginRequiredMixin, ListView, FormView):
         cart.delete()
         return super().form_valid(form)
 
+class OrderConfirmationView(LoginRequiredMixin, TemplateView):
+    model = Order
+    template_name = 'store/order_confirmation.html'
+    context_object_name = 'order'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = self.get_queryset()
+        context['order_items'] = OrderItem.objects.filter(order=order)
+        return context
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).last()
+
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'store/order.html'
+    context_object_name = 'order'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = self.get_object()
+        context['order_items'] = OrderItem.objects.filter(order=order)
+        return context
+
+
+class OrderView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'store/order.html'
+    context_object_name = 'order'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = self.get_object()
+        context['order_items'] = OrderItem.objects.filter(order=order)
+        return context
+
+    def get_object(self):
+        return Order.objects.filter(user=self.request.user).first()
+
+        
+#    def get_context_data(self, **kwargs):
+#        context = super().get_context_data(**kwargs)
+#        order = self.get_object()
+#        context['order_items'] = OrderItem.objects.filter(order=order)
+#        return context
+
+"""
+class OrderConfirmationView2(LoginRequiredMixin, ListView):
 class OrderConfirmationView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'store/order.html'
@@ -143,6 +192,25 @@ class OrderConfirmationView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user).last()
 
+    model = Order
+    template_name = 'store/order.html'
+    context_object_name = 'order'
+    
+    # get_context_data() --> populate a dictionary to use as the template context
+        # super().get_co... --> Call the base implementation first to get a context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order_items'] = OrderItem.order.all()
+        
+        print(order_items)
+
+        return context
+
+    # get_queryset --> list of objects that you want to display
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).last()
+"""
+
 class OrderListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'store/orders.html'
@@ -152,7 +220,16 @@ class OrderListView(LoginRequiredMixin, ListView):
         if self.request.user.is_superuser:
             return Order.objects.all()
         else:
-            return Order.objects.filter(user=self.request.user).all()
+            return Order.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        orders = self.get_queryset()
+        for order in orders:
+            order.order_items = OrderItem.objects.filter(order=order)
+        context['orders'] = orders
+        return context
+
 
 class RemoveFromCartView(View):
     def post(self, request):

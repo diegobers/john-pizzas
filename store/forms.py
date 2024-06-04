@@ -1,6 +1,9 @@
 from django import forms
 from .models import Order, Pizza
 
+from django.utils.translation import gettext_lazy as _
+
+
 
 class PizzaForm(forms.ModelForm):
     class Meta:
@@ -8,7 +11,7 @@ class PizzaForm(forms.ModelForm):
         fields = ['name', 'price']
 
 
-class CheckoutForm(forms.ModelForm):
+class CartCheckoutForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['is_shipping', 'shipping_address', 'payment_method', 'observation']
@@ -21,5 +24,11 @@ class CheckoutForm(forms.ModelForm):
         self.fields['payment_method'].widget.attrs.update({'class': 'form-control'})
         self.fields['observation'].widget.attrs.update({'class': 'form-control'})
         
+
+        # Add custom Bootstrap 5 classes to labels
+        self.fields['is_shipping'].label = _('Entregar?')
+        self.fields['shipping_address'].label = _('Endereço')
+        self.fields['payment_method'].label = _('Forma de Pagamento:')
+
         if user:
             self.fields['shipping_address'].initial = user.address if user else ''

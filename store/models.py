@@ -53,7 +53,10 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='card')
     status = models.CharField(max_length=10, choices=ORDER_STATUS, default='received')
 
+    class Meta:
+        ordering = ['-created_at']
 
+        
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)

@@ -12,12 +12,12 @@ urlpatterns = [
   #path('dashboard/', views.UserProfileDetailView.as_view(), name='dashboard'),
 
   path('cart/', views.CartView.as_view(), name='view_cart'),
-  path('cart-confirmation/', views.CartConfirmationView.as_view(), name='confirm_cart'),
+  path('cart-checkout/', views.CartCheckoutView.as_view(), name='checkout_cart'),
   
-  #path('order/', views.OrderView.as_view(), name='view_order'),
+  path('order/', views.OrderView.as_view(), name='order_view'),
+  path('order-detalhes/<int:pk>/', views.OrderDetailView.as_view(), name='order_detail'),
   path('order-confirmation/', views.OrderConfirmationView.as_view(), name='order_confirmation'),
-  
-  path('orders-list/', views.OrderListView.as_view(), name='order_list'),
+  path('order-list/', views.OrderListView.as_view(), name='order_list'),
 # path('shipping-address/', ShippingAddressView.as_view(), name='shipping_address'),
 # path('payment/', PaymentView.as_view(), name='payment'),
 ]
