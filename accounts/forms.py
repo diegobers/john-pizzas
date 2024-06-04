@@ -31,6 +31,10 @@ class UserProfileForm(forms.ModelForm):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         self.fields['address'].widget.attrs.update({'class': 'form-control'})
         
+        self.fields['address'].label = _('Endereço:')
+
+
+
         #for field in self.fields:
         #    self.fields[field].widget.attrs['class'] = 'form-control'
         
@@ -39,3 +43,13 @@ class UpdateProfileForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'phone_number']
         exclude = ['password']
+
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateProfileForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone_number'].widget.attrs.update({'class': 'form-control'})
+        
+        self.fields['first_name'].label = _('Nome')
+        self.fields['phone_number'].label = _('Telefone')
+

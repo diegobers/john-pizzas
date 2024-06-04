@@ -21,7 +21,7 @@ urlpatterns = [
     #path('login_or_signup/', login_or_signup, name='login_or_signup'),
     path('sair/', LogoutView.as_view(), name='logout'),
 
-    path('view_profile/', ProfileView.as_view(), name='view_profile'),
+    #path('view_profile/', ProfileView.as_view(), name='view_profile'),
     
     path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
     

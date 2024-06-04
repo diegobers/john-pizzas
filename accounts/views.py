@@ -1,6 +1,6 @@
 from allauth.account.views import LoginView, SignupView
 from django.urls import reverse_lazy
-from store.models import Cart, Order
+from store.models import Cart, Order, OrderItem
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 #from django.views.generic.base import TemplateView, View
@@ -42,7 +42,7 @@ class AddressProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'account/add_address.html'
     context_object_name = 'user'
     form_class = UserProfileForm
-    success_url = reverse_lazy('accounts:view_profile')
+    success_url = reverse_lazy('store:order_view')
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -60,7 +60,7 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'account/edit_profile.html'
     context_object_name = 'user'
     form_class = UpdateProfileForm
-    success_url = reverse_lazy('accounts:view_profile')
+    success_url = reverse_lazy('store:order_view')
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -76,7 +76,12 @@ class ProfileView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         orders = Order.objects.filter(user=self.request.user)
+        order_items = OrderItem.objects.filter(order__user=self.request.user)[:2]
+
         context['orders'] = orders
+        context['order_items'] = order_items
+        
+
         return context
 
 

@@ -10,38 +10,46 @@
 <!-- Dashboard Section -->
 <section id="address-user-dashboard" class="py-5">
   {% container %}
-    {% row 'row-cols-1 row-cols-sm-2 justify-content-center' %}
-      {% col 'col-lg-4' %}
+
+    {% row %}
+      {% col 'col-12 text-center' %}
+        <h1 class="mb-4 py-2">Endereços de Entrega</h1>
+      {% endcol %}
+    {% endrow %}
+    <!-- Main -->
+    {% row 'row-cols-1 row-cols-md-2 justify-content-center' %}
+      <!-- User Card -->
+      {% col 'col-12 col-md-3' %}
         <div class="card border-0 mb-4">      
           <div class="card-header text-center py-4 mt-2">
-            <img src="{{ user.photo.url }}" class="card-img-top img-fluid rounded-circle shadow border border-2 border-black" style="width: 96px; height: 96px;" alt="Avatar">
+            <img src="{{ user.photo.url }}" class="card-img-top img-fluid rounded-circle shadow-lg border border-2 border-black" style="width: 96px; height: 96px;" alt="Avatar">
             <h4 class="mb-0 mt-2">{{ user.first_name}}</h4>
             <p class="card-text text-muted"><small class="text-body-secondary">{{ user.email }}</small></p>
           </div>
           <div class="card-body">
             <nav class="list-group">
-              <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'accounts:view_profile' %}">
+              <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'store:order_list' %}">
                 <span>
-                  <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="">
+                  <img src="{% static 'icons/bag-check.svg' %}" class="me-2" width="24" height="24" alt="">
                   Pedidos
                 </span>
                 <span class="badge rounded-circle text-bg-dark">5</span>
               </a>
               <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'accounts:edit_profile' %}">
                 <span>
-                  <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="">
+                  <img src="{% static 'icons/person-gear.svg' %}" class="me-2" width="24" height="24" alt="">
                   Perfil
                 </span>               
               </a>
               <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'accounts:add_address' %}">
                 <span>
-                  <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="">
+                  <img src="{% static 'icons/geo-alt.svg' %}" class="me-2" width="24" height="24" alt="">
                   Endereço
                 </span>
               </a>
               <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'accounts:logout' %}">  
                 <span>
-                  <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Sair">
+                  <img src="{% static 'icons/box-arrow-right.svg' %}" class="me-2" width="24" height="24" alt="Sair">
                   Sair
                 </span>
               </a>
@@ -50,11 +58,17 @@
         </div>
       {% endcol %}
       
-      {% col 'col-lg-8' %}
+      {% col 'col-12 col-md-9' %}
         <form method="post">
           {% csrf_token %}
-          {% bootstrap_form form %}
-          {% bootstrap_button button_type="submit" content="Atualizar" %} 
+
+          {% bootstrap_field form.address placeholder="Rua..." %}
+
+          <div class="text-center">
+
+            {% bootstrap_button button_type="submit" button_class="btn btn-dark w-25" content="Atualizar" %} 
+          </div>
+
          </form> 
       {% endcol %}
     {% endrow %}

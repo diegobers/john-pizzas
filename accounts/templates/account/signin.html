@@ -10,13 +10,13 @@
   {% container 'mt-5' %}
     {% row 'justify-content-center' %}
       {% col 'col-lg-4 col-md-6' %}
-        <div class="card border-0 mb-0">
+        <div class="card border shadow">
           <div class="card-header bg-transparent">
-            <div class="text-center">
-              <a href="{% provider_login_url 'google' %}" class="btn btn-neutral btn-icon btn-sm mb-0">
+            <div class="text-center my-4">
+              <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark btn-icon btn-sm mb-0">
                 <i class="fa-brands fa-google"></i> Google
               </a>
-              <a href="#" class="btn btn-primary btn-icon btn-sm mb-0">
+              <a href="#" class="btn btn-dark btn-icon btn-sm mb-0">
                 <i class="fa-brands fa-facebook"></i> Facebook
               </a>
             </div>
@@ -28,8 +28,9 @@
               {% bootstrap_field form.login %}
               {% bootstrap_field form.password %}
               {% bootstrap_field form.remember %}
-
-              {% bootstrap_button button_type="submit" content="OK" %}
+              <div class="text-center">
+                {% bootstrap_button button_type="submit" button_class="btn btn-dark w-50" content="Entrar" %}
+              </div> 
             </form>
            </div>
         </div>
