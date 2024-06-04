@@ -62,11 +62,17 @@
                   </span>
                 </li>
               </ul>
+              
               <div class="mt-4">              
                 <form method="post">
                   {% csrf_token %}
-                  {% bootstrap_form form %}
-                  {% bootstrap_button button_type="submit" class="btn btn-dark w-100" content="Finalizar Pedido" %}        
+                  <div class="text-start">
+                    {% bootstrap_field form.is_shipping %}
+                    {% bootstrap_field form.shipping_address placeholder="Rua..." %}
+                    {% bootstrap_field form.payment_method %}
+                  </div>
+                  {% bootstrap_field form.observation show_label=False placeholder="Observação" %}
+                  {% bootstrap_button button_type="submit" button_class="btn btn-dark w-100" content="Finalizar Pedido" %}        
                 </form>
               </div>
           </div>

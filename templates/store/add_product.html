@@ -17,8 +17,12 @@
         <form method="post" action="{% url 'store:add_pizza' %}">
           {% csrf_token %}
 
-          {% bootstrap_form form %}
-          {% bootstrap_button button_type="submit" content="Adicionar" %}   
+          {% bootstrap_field form.name show_label=False placeholder="Nome" %}
+          {% bootstrap_field form.price show_label=False placeholder="Preço" %}
+
+          <div class="text-center">
+            {% bootstrap_button button_class="btn btn-dark w-25" button_type="submit" content="Adicionar" %}   
+          </div>
         </form>
 
       {% endcol %}

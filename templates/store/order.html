@@ -2,7 +2,7 @@
 
 {% load grid_tags static %}
 
-{% block title %}Pedido Confirmado{% endblock %}
+{% block title %}Detalhes do Pedido{% endblock %}
 
 
 {% block content %}
@@ -11,13 +11,65 @@
   {% container %}
     {% row 'justify-content-center' %}  
       {% col 'col-12 col-md-10 col-lg-8 col-xl-6 text-center' %}
-        <!-- Img SVG -->
-        <img src="{% static 'icons/cart-check.svg' %}" width="128" height="128" alt="Pedido Confirmado" class="img-fluid" >
-
-        <h2 class="mt-4 mb-2">Pedido Confirmado!!!</h2>
-        <p>Obrigado! Seu pedido está sendo preparado.</p>
-        <a class="btn btn-dark w-50 my-2" href="{% url 'accounts:view_profile' %}">Meus Pedidos</a>
+        <!-- Header -->
+        <h2 class="mt-4 mb-2">Detalhes do Pedido</h2>
       {% endcol %}
+      <!-- Orders Card -->
+      {% col 'col-12 col-md-9' %}
+            <div class="card mb-4 shadow">
+              <div class="card-body pb-0">
+                <div class="card-body p-4 pb-2">
+                  {% row %}
+                    {% col 'col-6 col-lg-3' %}
+                      <h6 class="text-muted">Código</h6>
+                      <p class="mb-lg-0 fs-sm fw-bold">#{{ order.id }}</p>
+                    {% endcol %}
+                    {% col 'col-6 col-lg-3' %}
+                      <h6 class="text-muted">Data</h6>
+                      <p class="mb-lg-0 fs-sm fw-bold">{{ order.created_at }}</p>
+                    {% endcol %}
+                    {% col 'col-6 col-lg-3' %}
+                      <h6 class="text-muted">Status</h6>
+                      <p class="mb-lg-0 fs-sm fw-bold">{{ order.status }}</p>
+                    {% endcol %}
+                    {% col 'col-6 col-lg-3' %}
+                      <h6 class="text-muted">Valor Total:</h6>
+                      <p class="mb-lg-0 fs-sm fw-bold">{{ order.total }}</p>
+                    {% endcol %}
+                  {% endrow %}
+                </div>
+              </div>
+              <div class="card-footer">
+                {% row 'd-flex align-items-center' %}
+                  <!-- Order Items -->
+                  {% col 'col-12 col-lg-6' %}
+                    {% row 'd-flex justify-content-evenly m-4' %}
+                      <h3>Items:</h3>
+                      {% for item in order_items %}
+                        <!-- Img -->
+                        {% col 'col-4' %}
+                          <img class="img-fluid" src="{{ item.pizza.photo_main.url }}" width="128" height="128" alt="Carrinho Item Imagem">
+                        {% endcol %}
+                      {% endfor %}
+                    {% endrow %}
+                  {% endcol %}
+                  <!-- Buttom Detail -->
+                  {% col 'col-12 col-lg-6' %}
+                    {% row 'justify-content-center m-2' %}
+                      <h6 class="text-muted">Obs:</h6>
+                      <p class="mb-lg-0 fs-sm fw-bold">#{{ order.observation }}</p>
+                    
+                    {% endrow %}
+                  {% endcol %}
+                {% endrow %}
+              </div>
+            </div>
+
+        
+      {% endcol %}
+
+
+
     {% endrow %}
 
 
@@ -54,3 +106,134 @@
   {% endcontainer %}
 </section>
 {% endblock content %}
+
+
+
+
+<!-- User Section -->
+<section id="user-dashboard" class="py-5">
+  {% container %}
+    <!-- Order Header -->
+    {% row %}
+      {% col 'col-12 text-center' %}
+        <h1 class="mb-4 py-2">Seus Pedidos</h1>
+      {% endcol %}
+    {% endrow %}
+    <!-- Main -->
+    {% row 'row-cols-1 row-cols-md-2 justify-content-center' %}
+      <!-- User Card -->
+      {% col 'col-12 col-md-3' %}
+        <div class="card border-0 mb-4">      
+          <div class="card-header text-center py-4 mt-2">
+            <img src="{{ user.photo.url }}" class="card-img-top img-fluid rounded-circle shadow-lg border border-2 border-black" style="width: 96px; height: 96px;" alt="Avatar">
+            <h4 class="mb-0 mt-2">{{ user.first_name}}</h4>
+            <p class="card-text text-muted"><small class="text-body-secondary">{{ user.email }}</small></p>
+          </div>
+          <div class="card-body">
+            <nav class="list-group">
+              <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'store:order_list' %}">
+                <span>
+                  <img src="{% static 'icons/bag-check.svg' %}" class="me-2" width="24" height="24" alt="">
+                  Pedidos
+                </span>
+                <span class="badge rounded-circle text-bg-dark">5</span>
+              </a>
+              <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'accounts:edit_profile' %}">
+                <span>
+                  <img src="{% static 'icons/person-gear.svg' %}" class="me-2" width="24" height="24" alt="">
+                  Perfil
+                </span>               
+              </a>
+              <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'accounts:add_address' %}">
+                <span>
+                  <img src="{% static 'icons/geo-alt.svg' %}" class="me-2" width="24" height="24" alt="">
+                  Endereço
+                </span>
+              </a>
+              <a class="list-group-item d-flex justify-content-between align-items-center text-decoration-none" href="{% url 'accounts:logout' %}">  
+                <span>
+                  <img src="{% static 'icons/box-arrow-right.svg' %}" class="me-2" width="24" height="24" alt="Sair">
+                  Sair
+                </span>
+              </a>
+            </nav>
+          </div>
+        </div>
+      {% endcol %}
+      <!-- Orders Card -->
+      {% col 'col-12 col-md-9' %}
+        {% if orders %}
+          {% for order in orders %}
+            <div class="card mb-4 shadow">
+              <div class="card-body pb-0">
+                <div class="card">
+                  <div class="card-body p-4 pb-2">
+                    {% row %}
+                      {% col 'col-6 col-lg-3' %}
+                        <h6 class="text-muted">Código</h6>
+                        <p class="mb-lg-0 fs-sm fw-bold">#{{ order.id }}</p>
+                      {% endcol %}
+
+                      {% col 'col-6 col-lg-3' %}
+                        <h6 class="text-muted">Data</h6>
+                        <p class="mb-lg-0 fs-sm fw-bold">{{ order.created_at }}</p>
+                      {% endcol %}
+                      
+                      {% col 'col-6 col-lg-3' %}
+                        <h6 class="text-muted">Status</h6>
+                        <p class="mb-lg-0 fs-sm fw-bold">{{ order.status }}</p>
+                      {% endcol %}
+                      
+                      {% col 'col-6 col-lg-3' %}
+                        <h6 class="text-muted">Valor Total:</h6>
+                        <p class="mb-lg-0 fs-sm fw-bold">{{ order.total }}</p>
+                      {% endcol %}
+                    {% endrow %}
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                {% row 'd-flex align-items-center' %}
+                  <!-- Order Items -->
+                  {% col 'col-12 col-lg-6' %}
+                    {% row 'd-flex justify-content-evenly m-4' %}
+                      <h3>Items:</h3>
+                      {% for item in order.order_items %}
+                        <!-- Img -->
+                        {% col 'col-4' %}
+                          <img class="img-fluid" src="{{ item.pizza.photo_main.url }}" width="128" height="128" alt="Carrinho Item Imagem">
+                        {% endcol %}
+                      {% endfor %}
+                    {% endrow %}
+                  {% endcol %}
+                  <!-- Buttom Detail -->
+                  {% col 'col-12 col-lg-6' %}
+                    {% row 'justify-content-center m-2' %}
+                      <a class="btn btn-dark w-50" href="#">Detalhes</a>
+                    {% endrow %}
+                  {% endcol %}
+                {% endrow %}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <!-- Empty Context -->
+          {% row 'd-flex justify-content-center mt-5' %}
+            {% col 'col-md-8 my-2 text-center' %}
+              <img src="{% static 'icons/cart-x.svg' %}" width="64" height="64" alt="Carrinho Vazio">         
+              <h2 class="mt-2">Nenhum Pedido...</h2>
+              <small>Faça seu primeiro pedido!</small>
+            {% endcol %}
+          {% endrow %}
+          {% row 'd-flex justify-content-center mb-5' %}
+            {% col 'col-md-8 my-2 text-center' %}
+              <a class="btn btn-dark text-center w-50" href="{% url 'store:index' %}">Fazer Pedido</a>
+            {% endcol %}
+          {% endrow %}
+        {% endif %}
+
+
+      {% endcol %}
+    {% endrow %}
+  {% endcontainer %}
+</section>

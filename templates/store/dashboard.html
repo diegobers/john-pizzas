@@ -10,13 +10,15 @@
 <!-- Dashboard Section -->
 <section id="user-dashboard" class="py-5">
   {% container %}
+    <!-- Order Header -->
     {% row %}
       {% col 'col-12 text-center' %}
-        <!--  Heading -->
         <h1 class="mb-4 py-2">Seus Pedidos</h1>
       {% endcol %}
     {% endrow %}
+    <!-- Main Section -->
     {% row 'row-cols-1 row-cols-md-2 justify-content-center' %}
+      <!-- User Card -->
       {% col 'col-12 col-md-3' %}
         <div class="card border-0 mb-4">      
           <div class="card-header text-center py-4 mt-2">
@@ -55,20 +57,25 @@
           </div>
         </div>
         <hr>
+        <!-- Admin Add Product -->
         {% if request.user.is_superuser %}
           <div class="text-center">            
             <a href="{% url 'store:add_pizza' %}" class="btn btn-dark w-100">Adicionar Produto</a>
           </div>
         {% endif %}
       {% endcol %}
+      <!-- Orders Card -->
       {% col 'col-12 col-md-9' %}
-        <!-- Order -->
-        {% if orders %}       
+        {% if orders %}    
+    
+
+
           {% for order in orders %}
-            <div class="card mb-4 border">
+            <div class="card mb-4 shadow">
+              
               <div class="card-body pb-0">
                 <div class="card">
-                  <div class="card-body bg-light">
+                  <div class="card-body p-4 pb-2">
                     {% row %}
                       {% col 'col-6 col-lg-3' %}
                         <h6 class="text-muted">Código</h6>
@@ -94,16 +101,39 @@
                   </div>
                 </div>
               </div>
+ 
               <div class="card-footer">
-                <ul>
-                  {% for items in order_items %}
-                    <li>{{ items.pizza.name }} \ {{ items.quantity }}</li>
-                  {% endfor %}
-                </ul>
-              </div>      
+                {% row 'd-flex align-items-center' %}
+            
+                  <!-- Order Items -->
+                  {% col 'col-12 col-lg-6' %}
+                    {% row 'd-flex justify-content-evenly m-4' %}
+                      {% for order_item in order_items %}
+                        <!-- Img -->
+                        {% col 'col-4' %}
+                          <img class="img-fluid" src="{{ order_item.pizza.photo_main.url }}" width="128" height="128" alt="Carrinho Item Imagem">
+                        {% endcol %}
+                      {% endfor %}
+                    {% endrow %}
+                  {% endcol %}
+                  <!-- Buttom Detail -->
+                  {% col 'col-12 col-lg-6' %}
+                    {% row 'justify-content-center m-2' %}
+                      <a class="btn btn-dark w-50" href="#">Detalhes</a>
+                    {% endrow %}
+                  {% endcol %}
+                
+                {% endrow %}
+              </div>
+
+
             </div>
           {% endfor %}
+
+
+        
         {% else %}
+          <!-- Empty Context -->
           {% row 'd-flex justify-content-center mt-5' %}
             {% col 'col-md-8 my-2 text-center' %}
               <img src="{% static 'icons/cart-x.svg' %}" width="64" height="64" alt="Carrinho Vazio">         
@@ -119,6 +149,7 @@
         {% endif %}
       {% endcol %}
     {% endrow %}
+
   {% endcontainer %}
 </section>
 {% endblock content %}

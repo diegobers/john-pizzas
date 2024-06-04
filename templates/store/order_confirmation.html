@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+
+{% load grid_tags static %}
+
+{% block title %}Pedido Confirmado!{% endblock %}
+
+
+{% block content %}
+<!-- Order Section -->
+<section id="order" class="py-5">
+  {% container %}
+    {% row 'justify-content-center' %}  
+      {% col 'col-12 col-md-10 col-lg-8 col-xl-6 text-center' %}
+        <!-- Img SVG -->
+        <img src="{% static 'icons/cart-check.svg' %}" width="128" height="128" alt="Pedido Confirmado" class="img-fluid" >
+
+        <h2 class="mt-4 mb-2">Pedido Confirmado!!!</h2>
+        <p>Obrigado! Seu pedido está sendo preparado.</p>
+        <a class="btn btn-dark w-50 my-2" href="{% url 'store:order_view' %}">Pedido</a>
+
+        <a class="btn btn-dark w-50 my-2" href="{% url 'store:order_list' %}">Meus Pedidos</a>
+      {% endcol %}
+    {% endrow %}
+  {% endcontainer %}
+</section>
+{% endblock content %}
