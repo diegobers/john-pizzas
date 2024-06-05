@@ -18,15 +18,16 @@
                 <div class="card-body">
                   <h5 class="card-title">{{ pizza.name }}</h5>
                   <p class="card-text">{{ pizza.price }}</p>
+                  <div class="card-btn text-center">
+                    <form method="post" action="{% url 'store:add_cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
+                      {% bootstrap_button button_class="btn btn-dark w-25" button_type="submit" content="Comprar" %}
+                    </form>
+                  </div>
                 </div>
-              </div>  
-              <div class="text-center mt-4 mb-4 pb-4 border-bottom border-2">
-                <form method="post" action="{% url 'store:add_cart' %}">
-                  {% csrf_token %}
-                  <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
-                  {% bootstrap_button button_class="btn btn-dark" button_type="submit" content="Comprar" %}
-                </form>
               </div>
+              <hr class="my-4">  
             {% endfor %}
           {% endcol %}
         {% endrow %}
