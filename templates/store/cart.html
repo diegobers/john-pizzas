@@ -18,7 +18,7 @@
       {% row  %}
         {% col 'col-12 col-md-7' %}
           <!-- Cart Items List -->
-          <ul class="list-group list-group-lg list-group-flush mb-6">
+          <ul class="list-group list-group-lg list-group-flush shadow rounded mb-6">
             {% for item in cart_items %}                
             <li class="list-group-item">
               <div class="row align-items-center">
@@ -49,7 +49,7 @@
           <div class="card text-center mb-3 border-0 bg-light">
             <div class="card-body pt-0">
               <h4 class="card-title fs-lg fw-bold mb-3">Resumo</h4>
-                <ul class="list-group list-group-sm">
+                <ul class="list-group list-group-sm shadow rounded">
                   {% for item in cart_items %}                
                     <li class="list-group-item d-flex">
                       <span>{{ item.pizza.name }}</span>
@@ -62,7 +62,7 @@
                     </span>
                   </li>
                 </ul>
-              <a class="btn btn-dark w-75 mt-4 mb-2" href="{% url 'store:checkout_cart' %}">Finalizar Carrinho</a>
+              <a class="btn btn-dark w-75 shadow rounded mt-4 mb-2" href="{% url 'store:checkout_cart' %}">Finalizar Carrinho</a>
               <a class="btn btn-link px-0 text-body" href="{% url 'store:index' %}">Continuar Comprando</a>
             </div>
           </div>

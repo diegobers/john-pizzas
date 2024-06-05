@@ -8,7 +8,7 @@
 {% block content %}
 <!-- Cart Confirm Section -->
 <section class="py-4">
-  {% container %}
+  {% container 'px-4' %}
     {% row %}
       {% col 'col-12' %}
         <h3 class="mb-5 text-start">Confirmar Pedido</h3>
@@ -48,37 +48,82 @@
       {% col 'col-12 col-md-5 col-lg-4 offset-lg-1' %}
         <div class="card text-center mb-3 border-0 bg-light">
           <div class="card-body pt-0">
-            <h4 class="card-title fs-lg fw-bold mb-3">Resumo</h4>
-              <ul class="list-group list-group-sm">
-                {% for item in cart_items %}                
-                  <li class="list-group-item d-flex">
-                    <span>{{ item.pizza.name }}</span>
-                    <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
-                  </li>
-                {% endfor %}                
-                <li class="list-group-item d-flex fs-lg fw-bold">
-                  <span>Subtotal: R$</span>
-                  <span class="ms-auto fs-sm">{{ cart_total }}
-                  </span>
+            <ul class="list-group list-group-sm">
+              {% for item in cart_items %}                
+                <li class="list-group-item d-flex">
+                  <span>{{ item.pizza.name }}</span>
+                  <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
                 </li>
-              </ul>
-              
-              <div class="mt-4">              
-                <form method="post">
-                  {% csrf_token %}
-                  <div class="text-start">
-                    {% bootstrap_field form.is_shipping %}
-                    {% bootstrap_field form.shipping_address placeholder="Rua..." %}
+              {% endfor %}                
+              <li class="list-group-item d-flex fs-lg fw-bold">
+                <span>Subtotal: R$</span>
+                <span class="ms-auto fs-sm">{{ cart_total }}
+                </span>
+              </li>
+            </ul>
+            
+            <div class="mt-4">
+              <form method="post" action="">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+           
+                    <div class="mb-3">
+                      <div id="id_is_shipping" role="group">
+                        {% for radio in form.is_shipping %}
+                          <input type="radio" class="form-check-input btn-check" name="is_shipping" id="{{ radio.id_for_label }}" value="{{ radio.value }}" {% if radio.value == form.initial.is_shipping %}checked="checked"{% endif %} required>
+                          <label class="btn btn-outline-dark" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                        {% endfor %}
+                      </div>
+                    </div>
+
+                <div class="mb-3 text-start" id="shipping-address-field" style="display: none;">
+                    {% bootstrap_field form.shipping_address %}
+                </div>
+                <div class="mb-3 text-start">
                     {% bootstrap_field form.payment_method %}
-                  </div>
-                  {% bootstrap_field form.observation show_label=False placeholder="Observação" %}
-                  {% bootstrap_button button_type="submit" button_class="btn btn-dark w-100" content="Finalizar Pedido" %}        
-                </form>
-              </div>
+                </div>
+                <div class="mb-3">
+                    {% bootstrap_field form.observation show_label=False %}
+                </div>
+                <div class="mb-3">
+                  {% bootstrap_button button_type="submit" button_class="btn btn-dark w-75" content="Finalizar Pedido" %} 
+                </div>
+              </form>              
+            </div>
           </div>
         </div>
       {% endcol %}
     {% endrow %}
   {% endcontainer %}
 </section>  
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const shippingOptionButtons = document.querySelectorAll('#id_is_shipping .btn');
+            const shippingAddressField = document.getElementById('shipping-address-field');
+
+            shippingOptionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const radioButton = document.getElementById(button.getAttribute('for'));
+                    radioButton.checked = true;
+                    if (radioButton.value === 'True') {
+                        shippingAddressField.style.display = 'block';
+                    } else {
+                        shippingAddressField.style.display = 'none';
+                    }
+                });
+            });
+
+            // Trigger change event on page load to set the initial state
+            const selectedOption = document.querySelector('input[name="is_shipping"]:checked');
+            if (selectedOption) {
+                selectedOption.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+
+
 {% endblock content %}

@@ -116,6 +116,7 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
             is_shipping=form.cleaned_data['is_shipping'],
             total=sum(item.pizza.price * item.quantity for item in cart.items.all())
         )
+
         for item in cart.items.all():
             OrderItem.objects.create(
                 order=order,
