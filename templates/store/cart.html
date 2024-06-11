@@ -10,11 +10,16 @@
 <section id="cart">
   {% container %}
     {% if cart_items %}
+      
+
       {% row %}
         {% col 'col-12 text-start' %}
           <h3 class="mt-2">Meu Carrinho</h3>
         {% endcol %}
       {% endrow %}
+      
+
+
       {% row  %}
         {% col 'col-12 col-md-7' %}
           <!-- Cart Items List -->
@@ -36,7 +41,7 @@
                   <div class="d-flex align-items-center">
                     <p class="mt-7 fs-sm text-muted">Qtd:{{ item.quantity }}</p>
                     <a class="ms-auto" href="#">
-                      <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Carrinho Vazio"> 
+                      <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item"> 
                     </a>
                   </div>
                 </div>
@@ -68,6 +73,19 @@
           </div>
         {% endcol %}
       {% endrow %}
+    
+
+
+
+
+
+
+
+
+
+
+
+
     {% else %}
     <!-- Null Cart -->
       {% row 'd-flex justify-content-center mt-5' %}

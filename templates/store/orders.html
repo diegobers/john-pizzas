@@ -9,23 +9,62 @@
 
 {% if request.user.is_superuser %}
 <!-- Admin Section -->
-<section id="admin-dashboard" class="py-5">
+<section id="admin-dashboard">
   {% container %}
     <!-- Header -->
     {% row %}
       {% col 'col-12 text-center' %}
-        <h1 class="mb-4 py-2">Painel - Admin</h1>
+        <h1 class="mb-2 py-1">Painel - Admin</h1>
       {% endcol %}
     {% endrow %}
     <!-- Main -->
-    {% row 'row-cols-1 row-cols-md-2 justify-content-center' %}
+    {% row 'row-cols-1 row-cols-md-2 justify-content-center gy-2' %}
       <!-- Add Product -->
-      {% col 'col-12 col-md-3' %}
+      {% col 'col-sm-8 col-md-6 col-lg-4' %}
         <div class="text-center">            
           <a href="{% url 'store:add_pizza' %}" class="btn btn-dark w-100">Adicionar Produto</a>
         </div>
       {% endcol %}
+      {% col 'col-sm-8 col-md-6 col-lg-4' %}
+        <div class="text-center">            
+          <a href="#" class="btn btn-outline-dark w-100">Adicionar Cupom</a>
+        </div>
+      {% endcol %}
     {% endrow %}
+
+    <hr class="my-4">
+
+    {% row 'mx-md-0 mx-lg-4 px-md-0 px-lg-2' %}
+      <h2>Lista de Pedidos</h2>
+      <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Observation</th>
+                    <th scope="col">Shipping</th>
+                    <th scope="col">Payment Method</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for order in orders %}
+                <tr scope="row">
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.observation }}</td>
+                    <td>{{ order.is_shipping|yesno:"Sim,Não" }}</td>
+                    <td>{{ order.get_payment_method_display }}</td>
+                    <td>{{ order.get_status_display }}</td>
+                    <td>R$ {{ order.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    {% endrow %}
+
+
   {% endcontainer %}
 </section>
 
