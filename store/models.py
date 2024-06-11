@@ -50,7 +50,7 @@ class Order(models.Model):
     total = models.DecimalField(max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     observation = models.TextField(blank=True, null=True)
-    is_shipping = models.BooleanField(default=True)
+    is_shipping = models.BooleanField(default=False)
     shipping_address = models.CharField(max_length=25, blank=True, null=True)
     payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='card')
     status = models.CharField(max_length=10, choices=ORDER_STATUS, default='received')
@@ -67,7 +67,7 @@ class OrderItem(models.Model):
 
 class Coupon(models.Model):
     code = models.CharField(max_length=15)
-    amount = models.FloatField()
+    amount = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
         return self.code

@@ -101,13 +101,16 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cart_items'] = self.get_queryset()
+        context['cart_items'] = self.get_queryset() 
+        cart = self.get_queryset().first().cart if self.get_queryset().exists() else None
+        context['total'] = cart.get_cart_total if cart else 0
         return context
+
+
 
     def form_valid(self, form):
         cart = Cart.objects.filter(user=self.request.user).last()
         #promotion = form.cleaned_data['promo_code']
-        total = sum(item.pizza.price * item.quantity for item in cart.items.all())
         
         #if promotion:
         #total *= (1 - promotion.discount_percentage / 100)
@@ -117,9 +120,8 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
             shipping_address=form.cleaned_data['shipping_address'] if form.cleaned_data['is_shipping'] == 'True' else None,
             payment_method=form.cleaned_data['payment_method'],
             observation=form.cleaned_data['observation'],
-            is_shipping=form.cleaned_data['is_shipping'] == 'True',
-            total=total
-        )   
+            is_shipping=form.cleaned_data['is_shipping'],
+            total=sum(item.pizza.price * item.quantity for item in cart.items.all())        )   
 
         for item in cart.items.all():
             OrderItem.objects.create(

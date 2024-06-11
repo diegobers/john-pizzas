@@ -36,8 +36,6 @@ class CartCheckoutForm(forms.ModelForm):
         if user:
             self.fields['shipping_address'].initial = user.address if user else None
 
-        self.fields['shipping_address'].required = False
-
     def clean(self):
         cleaned_data = super().clean()
         is_shipping = cleaned_data.get('is_shipping') == 'True'
