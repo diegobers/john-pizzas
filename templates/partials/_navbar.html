@@ -12,11 +12,6 @@
     </button>
     <div class="collapse navbar-collapse" id="MynavbarHeader">
       <ul class="navbar-nav ms-auto">
-        <li class='nav-item'>
-          <a class='nav-link' href="{% url 'store:view_cart' %}">
-            <i class="fa-solid fa-cart-shopping"></i> Carrinho
-          </a>
-        </li>
         {% if request.user.is_authenticated %}
           <li class='nav-item'>
             <a class='nav-link' href="{% url 'store:order_list' %}">
@@ -29,6 +24,11 @@
             </a>
           </li>  
         {% else %}
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'store:view_cart' %}">
+              <i class="fa-solid fa-cart-shopping"></i> Carrinho
+            </a>
+          </li>
           <li class='nav-item'>
             <a class='nav-link' href="{% url 'accounts:signup' %}">
               <i class="fa-solid fa-user-plus"></i> Cadastrar
