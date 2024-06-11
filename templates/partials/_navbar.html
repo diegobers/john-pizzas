@@ -12,23 +12,34 @@
     </button>
     <div class="collapse navbar-collapse" id="MynavbarHeader">
       <ul class="navbar-nav ms-auto">
+        
+        {% if request.user.is_superuser is not True %}
+
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'store:view_cart' %}">
+              <i class="fa-solid fa-cart-shopping"></i> Carrinho
+            </a>
+          </li>
+
+        {% endif %}
+        
         {% if request.user.is_authenticated %}
           <li class='nav-item'>
             <a class='nav-link' href="{% url 'store:order_list' %}">
               <i class="fa-solid fa-address-card"></i> Painel
             </a>
           </li>
+
           <li class='nav-item'>
             <a class='nav-link' href="{% url 'accounts:logout' %}">
               <i class="fa-solid fa-right-from-bracket"></i> Sair
             </a>
           </li>  
+
+
         {% else %}
-          <li class='nav-item'>
-            <a class='nav-link' href="{% url 'store:view_cart' %}">
-              <i class="fa-solid fa-cart-shopping"></i> Carrinho
-            </a>
-          </li>
+
+
           <li class='nav-item'>
             <a class='nav-link' href="{% url 'accounts:signup' %}">
               <i class="fa-solid fa-user-plus"></i> Cadastrar

@@ -141,7 +141,7 @@ class CustomSignupView(SignupView):
 
 class CustomLoginView(LoginView):
     template_name = 'account/signin.html'
-    success_url = reverse_lazy('store:view_cart') 
+    success_url = reverse_lazy('store:order_list') 
     
     def get(self, request, *args, **kwargs):
         request.session['last_session_key'] = request.session.session_key
