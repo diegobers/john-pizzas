@@ -16,7 +16,7 @@ class CartCheckoutForm(forms.ModelForm):
         (False, 'Buscar')
     ]
 
-    is_shipping = forms.ChoiceField(choices=SHIPPING_CHOICES, widget=RadioSelectButtonGroup, initial=True)
+    is_shipping = forms.ChoiceField(choices=SHIPPING_CHOICES, widget=RadioSelectButtonGroup, initial=False)
 
     class Meta:
         model = Order
@@ -32,12 +32,11 @@ class CartCheckoutForm(forms.ModelForm):
 
         self.fields['shipping_address'].label = _('Endereço')
         self.fields['payment_method'].label = _('Pagamento')
-        self.fields['shipping_address'].help_text = _('Endereço')
 
         if user:
             self.fields['shipping_address'].initial = user.address if user else None
 
-        self.fields['shipping_address'].required = "False"
+        self.fields['shipping_address'].required = False
 
     def clean(self):
         cleaned_data = super().clean()
