@@ -51,7 +51,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     observation = models.TextField(blank=True, null=True)
     is_shipping = models.BooleanField(default=False)
-    shipping_address = models.CharField(max_length=25, blank=True, null=True)
+    shipping_address = models.CharField(max_length=25, blank=True)
     payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='card')
     status = models.CharField(max_length=10, choices=ORDER_STATUS, default='received')
 
