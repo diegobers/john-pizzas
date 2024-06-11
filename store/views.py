@@ -101,21 +101,25 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = CartItem.objects.filter(cart__user=self.request.user)
-        context['cart_items'] = cart_items
+        context['cart_items'] = self.get_queryset()
         return context
 
     def form_valid(self, form):
         cart = Cart.objects.filter(user=self.request.user).last()
+        #promotion = form.cleaned_data['promo_code']
+        total = sum(item.pizza.price * item.quantity for item in cart.items.all())
         
+        #if promotion:
+        #total *= (1 - promotion.discount_percentage / 100)
+
         order = Order.objects.create(
             user=self.request.user,
-            shipping_address=form.cleaned_data['shipping_address'],
+            shipping_address=form.cleaned_data['shipping_address'] if form.cleaned_data['is_shipping'] == 'True' else None,
             payment_method=form.cleaned_data['payment_method'],
             observation=form.cleaned_data['observation'],
-            is_shipping=form.cleaned_data['is_shipping'],
-            total=sum(item.pizza.price * item.quantity for item in cart.items.all())
-        )
+            is_shipping=form.cleaned_data['is_shipping'] == 'True',
+            total=total
+        )   
 
         for item in cart.items.all():
             OrderItem.objects.create(
@@ -123,8 +127,34 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
                 pizza=item.pizza,
                 quantity=item.quantity
             )
-        cart.delete()
+
+        cart.items.all().delete()
         return super().form_valid(form)
+
+def get_coupon(request, code):
+    try:
+        coupon = Coupon.objects.get(code=code)
+        return coupon
+    except ObjectDoesNotExist:
+        messages.info(request, "Cupom Inválido!")
+        return redirect("store:view_cart")
+
+
+class AddCouponView(View):
+    def post(self, *args, **kwargs):
+        form = CouponForm(self.request.POST or None)
+        if form.is_valid():
+            try:
+                code = form.cleaned_data.get('code')
+                order = Order.objects.get(
+                    user=self.request.user, ordered=False)
+                order.coupon = get_coupon(self.request, code)
+                order.save()
+                messages.success(self.request, "Successfully added coupon")
+                return redirect("store:view_cart")
+            except ObjectDoesNotExist:
+                messages.info(self.request, "You do not have an active order")
+                return redirect("store:view_cart")
 
 class OrderConfirmationView(LoginRequiredMixin, TemplateView):
     model = Order
@@ -166,51 +196,6 @@ class OrderView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return Order.objects.filter(user=self.request.user).first()
-
-        
-#    def get_context_data(self, **kwargs):
-#        context = super().get_context_data(**kwargs)
-#        order = self.get_object()
-#        context['order_items'] = OrderItem.objects.filter(order=order)
-#        return context
-
-"""
-class OrderConfirmationView2(LoginRequiredMixin, ListView):
-class OrderConfirmationView(LoginRequiredMixin, ListView):
-    model = Order
-    template_name = 'store/order.html'
-    context_object_name = 'order'
-    
-    # get_context_data() --> populate a dictionary to use as the template context
-        # super().get_co... --> Call the base implementation first to get a context
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        order_items = OrderItem.objects.filter(order__user=self.request.user)
-        context['order_items'] = order_items
-        return context
-
-    # get_queryset --> list of objects that you want to display
-    def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).last()
-
-    model = Order
-    template_name = 'store/order.html'
-    context_object_name = 'order'
-    
-    # get_context_data() --> populate a dictionary to use as the template context
-        # super().get_co... --> Call the base implementation first to get a context
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['order_items'] = OrderItem.order.all()
-        
-        print(order_items)
-
-        return context
-
-    # get_queryset --> list of objects that you want to display
-    def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).last()
-"""
 
 class OrderListView(LoginRequiredMixin, ListView):
     model = Order
