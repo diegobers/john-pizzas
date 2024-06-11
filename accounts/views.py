@@ -42,7 +42,7 @@ class AddressProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'account/add_address.html'
     context_object_name = 'user'
     form_class = UserProfileForm
-    success_url = reverse_lazy('store:order_view')
+    success_url = reverse_lazy('store:order_list')
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -60,7 +60,7 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'account/edit_profile.html'
     context_object_name = 'user'
     form_class = UpdateProfileForm
-    success_url = reverse_lazy('store:order_view')
+    success_url = reverse_lazy('store:order_list')
 
     def get_object(self, queryset=None):
         return self.request.user
