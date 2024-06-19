@@ -11,33 +11,12 @@
 <!-- Admin Section -->
 <section id="admin-dashboard">
   {% container %}
-    <!-- Header -->
-    {% row %}
-      {% col 'col-12 text-center' %}
-        <h1 class="mb-2 py-1">Painel - Admin</h1>
-      {% endcol %}
-    {% endrow %}
     <!-- Main -->
-    {% row 'row-cols-1 row-cols-md-2 justify-content-center gy-2' %}
-      <!-- Add Product -->
-      {% col 'col-sm-8 col-md-6 col-lg-4' %}
-        <div class="text-center">            
-          <a href="{% url 'store:add_pizza' %}" class="btn btn-dark w-100">Adicionar Produto</a>
-        </div>
-      {% endcol %}
-      {% col 'col-sm-8 col-md-6 col-lg-4' %}
-        <div class="text-center">            
-          <a href="#" class="btn btn-outline-dark w-100">Adicionar Cupom</a>
-        </div>
-      {% endcol %}
-    {% endrow %}
 
-    <hr class="my-4">
-
-    {% row 'mx-md-0 mx-lg-4 px-md-0 px-lg-2' %}
+    {% row 'mx-md-0 mx-lg-4 px-md-0 px-lg-2 mt-4' %}
       <h2>Lista de Pedidos</h2>
-      <div class="table-responsive">
-        <table class="table table-hover">
+      <div class="table-responsive p-4">
+        <table class="table table-hover shadow rounded">
             <thead class="table-light">
                 <tr>
                     <th scope="col">ID</th>
@@ -64,21 +43,78 @@
       </div>
     {% endrow %}
 
+    <hr class="my-4">
+    {% row 'justify-content-center gy-2 my-4' %}
+      {% col 'col-4 col-md-3' %}
+        <h6 class="text-muted">Produtos</h6>
+        <ul class="list-group list-group-lg list-group-flush shadow rounded mb-6">
+          {% for pizza in pizzas %}                
+          <li class="list-group-item">
+            {{ pizza.name }}
+            <small>{{ pizza.price }}</small>
+          </li>
+          {% endfor %}
+        </ul> 
+        
+
+      {% endcol %}
+      
+      {% col 'col-4 col-md-3' %}
+        <!-- Users List --> 
+        <h6 class="text-muted">Usuários</h6>
+        <ul class="list-group list-group-lg list-group-flush shadow rounded mb-6">
+          {% for user in users %}                
+          <li class="list-group-item">
+            {{ user.id }}
+            <small>{{ user.email }}</small>
+          </li>
+          {% endfor %}
+        </ul> 
+
+      {% endcol %}
+
+      {% col 'col-4 col-md-3' %}
+        <!-- Coupon List -->
+        <h6 class="text-muted">Cupons</h6>
+        <ul class="list-group list-group-lg list-group-flush shadow rounded mb-6">
+          {% for coupon in coupons %}                
+          <li class="list-group-item">
+            {{ coupon.code }}
+            <small>{{ coupon.amount }}</small>
+          </li>
+          {% endfor %}
+        </ul> 
+      {% endcol %}
+    {% endrow %}
+
+    <hr class="my-4 pt-2">
+
+                         
+    {% row 'row-cols-1 row-cols-md-2 justify-content-center gy-2' %}
+      <!-- Add Product -->
+      {% col 'col-sm-8 col-md-6 col-lg-4' %}
+        <div class="text-center">            
+          <a href="{% url 'store:add_pizza' %}" class="btn btn-dark w-100">Adicionar Produto</a>
+        </div>
+      {% endcol %}
+      {% col 'col-sm-8 col-md-6 col-lg-4' %}
+        <div class="text-center">        
+          <a href="{% url 'store:add_coupon' %}" class="btn btn-outline-dark w-100">Adicionar Cupom</a>
+        </div>
+      {% endcol %}
+    {% endrow %}
 
   {% endcontainer %}
 </section>
+
+
+
 
 {% else %}
 
 <!-- User Section -->
 <section id="user-dashboard" class="py-5">
   {% container %}
-    <!-- Order Header -->
-    {% row %}
-      {% col 'col-12 text-center' %}
-        <h1 class="mb-4 py-2">Seus Pedidos</h1>
-      {% endcol %}
-    {% endrow %}
     <!-- Main -->
     {% row 'row-cols-1 row-cols-md-2 justify-content-center' %}
       <!-- User Card -->
