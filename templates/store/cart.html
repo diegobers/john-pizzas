@@ -10,16 +10,11 @@
 <section id="cart">
   {% container %}
     {% if cart_items %}
-      
-
       {% row %}
         {% col 'col-12 text-start' %}
           <h3 class="mt-2">Meu Carrinho</h3>
         {% endcol %}
       {% endrow %}
-      
-
-
       {% row  %}
         {% col 'col-12 col-md-7' %}
           <!-- Cart Items List -->
@@ -38,17 +33,31 @@
                     <span class="ms-auto">{{ item.pizza.price }}</span>
                   </div>
                   <!-- Form Footer -->
-                  <div class="d-flex align-items-center">
-                    <p class="mt-7 fs-sm text-muted">Qtd:{{ item.quantity }}</p>
-                    <a class="ms-auto" href="#">
-                      <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item"> 
-                    </a>
+                  <div class="d-flex align-items-end">
+                    <p class="text-muted mt-2 mb-0 pb-2">Qtd:{{ item.quantity }} </p>
+                    <form method="post" action="{% url 'store:add_cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
+                      <input type="image" src="{% static 'icons/plus.svg' %}" width="32" height="32" alt="Adicionar Item">
+                    </form>
+                    <form class="ms-auto" method="post" action="{% url 'store:rm_item_cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="item_id" value="{{ item.id }}">
+                      <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
+                      <input type="image" src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item">
+                    </form> 
                   </div>
                 </div>
               </div>
             </li>
             {% endfor %}
           </ul>
+          {% row 'd-flex align-items-end justify-content-between mb-4 mb-md-0' %}
+            {% col 'mb-2 mb-md-0' %}
+              <form>        
+              </form>
+            {% endcol %}
+          {% endrow  %}
         {% endcol %}
         {% col 'col-12 col-md-5 col-lg-4 offset-lg-1' %}
           <div class="card text-center mb-3 border-0 bg-light">
@@ -73,19 +82,6 @@
           </div>
         {% endcol %}
       {% endrow %}
-    
-
-
-
-
-
-
-
-
-
-
-
-
     {% else %}
     <!-- Null Cart -->
       {% row 'd-flex justify-content-center mt-5' %}
@@ -94,14 +90,12 @@
           <h2 class="mt-2">Seu carrinho está vazio!</h2>
           <small>Você ainda não possui itens no seu carrinho.</small>
         {% endcol %}
-      {% endrow %}
-          
+      {% endrow %}  
       {% row 'd-flex justify-content-center mb-5' %}
         {% col 'col-md-8 my-2 text-center' %}
           <a class="btn btn-dark text-center w-25" href="{% url 'store:index' %}">Adicionar</a>
         {% endcol %}
       {% endrow %}
-
     {% endif %}
   {% endcontainer %}
 {% endblock content %}
