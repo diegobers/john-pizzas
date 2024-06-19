@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %} 
+
+{% load static %}
+{% load django_bootstrap5 grid_tags %}
+
+{% block content %}
+<!-- Add Coupon Section -->
+<section id="admin-add-coupon" class="py-5">
+  
+  {% container %}
+
+    {% row 'justify-content-center' %}
+      {% col 'col-lg-6' %}
+        <h1>Adicionar Cupom</h1>
+
+        <form method="post" action="{% url 'store:add_coupon' %}">
+          {% csrf_token %}
+
+          {% bootstrap_field form.code show_label=False placeholder="Cupom" %}
+          {% bootstrap_field form.amount show_label=False placeholder="%Valor" %}
+
+          <div class="text-center">
+            {% bootstrap_button button_class="btn btn-dark w-25" button_type="submit" content="Adicionar" %}   
+          </div>
+        </form>
+
+      {% endcol %}
+
+    {% endrow %}
+  {% endcontainer %}
+</section>
+{% endblock content %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Order, Pizza
+from .models import Order, Pizza, Coupon
 
 from django.utils.translation import gettext_lazy as _
 from django_bootstrap5.widgets import RadioSelectButtonGroup
@@ -10,13 +10,20 @@ class PizzaForm(forms.ModelForm):
         model = Pizza
         fields = ['name', 'price']
 
+
+class CouponForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = '__all__'
+
+
 class CartCheckoutForm(forms.ModelForm):
     SHIPPING_CHOICES = [
         (True, 'Entregar'),
         (False, 'Buscar')
     ]
 
-    is_shipping = forms.ChoiceField(choices=SHIPPING_CHOICES, widget=RadioSelectButtonGroup, initial=False)
+    is_shipping = forms.ChoiceField(choices=SHIPPING_CHOICES, widget=RadioSelectButtonGroup)
 
     class Meta:
         model = Order

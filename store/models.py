@@ -12,7 +12,12 @@ class Pizza(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.DO_NOTHING, 
+        null=True, 
+        blank=True
+    )
     session_key = models.CharField(max_length=40, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -22,8 +27,8 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
-    pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.DO_NOTHING)
+    pizza = models.ForeignKey(Pizza, on_delete=models.DO_NOTHING)
     quantity = models.PositiveIntegerField(default=0)
     
     @property
@@ -45,13 +50,13 @@ class Order(models.Model):
         ('pix','Pix'),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     #coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, blank=True, null=True)
     total = models.DecimalField(max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     observation = models.TextField(blank=True, null=True)
     is_shipping = models.BooleanField(default=False)
-    shipping_address = models.CharField(max_length=25, blank=True)
+    shipping_address = models.CharField(max_length=25, blank=True, null=True, default='')
     payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='card')
     status = models.CharField(max_length=10, choices=ORDER_STATUS, default='received')
 

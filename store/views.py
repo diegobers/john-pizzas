@@ -1,19 +1,23 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-
 from django.views.generic import (
     CreateView, 
     ListView, 
     TemplateView, 
     View, 
     DetailView,
+    UpdateView,
     FormView,
+    DeleteView,
 )
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Pizza, Cart, CartItem, Order, OrderItem
+from .models import Pizza, Cart, CartItem, Order, OrderItem, Coupon
 from django.http import JsonResponse
-from .forms import CartCheckoutForm, PizzaForm
+from .forms import CartCheckoutForm, PizzaForm, CouponForm
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class IndexView(TemplateView):
@@ -30,6 +34,13 @@ class PizzaCreateView(CreateView):
     template_name = 'store/add_product.html'
     form_class = PizzaForm
     success_url = reverse_lazy('store:index')
+
+
+class CouponCreateView(CreateView):
+    model = Coupon
+    template_name = 'store/add_coupon.html'
+    form_class = CouponForm
+    success_url = reverse_lazy('store:order_list')
 
 
 class PizzaListView(ListView):
@@ -85,6 +96,33 @@ class AddToCartView(View):
         
         return redirect('store:view_cart')
 
+
+class RemoveItemFromCartView(View):
+    def post(self, request, *args, **kwargs):    
+        pizza_id = request.POST.get('pizza_id')
+
+        cart_item = get_object_or_404(cart=cart, pizza=pizza_id)
+        cart_item.delete()
+        return redirect('store:view_cart')
+
+
+class RemoveCartItemView(DeleteView):
+    model = CartItem
+    success_message = "The item has been deleted from your cart."
+    http_method_names = ['post']
+
+    def get_success_url(self):
+        return reverse_lazy('store:view_cart')
+        
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super().delete(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        cart_item = self.request.POST.get('item_id')
+        pizza = self.request.POST.get('pizza_id')
+        return get_object_or_404(CartItem, id=cart_item, pizza_id=pizza)
+
 class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
     template_name = 'store/cart_checkout.html'
     context_object_name = 'cart_items'
@@ -105,8 +143,6 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
         cart = self.get_queryset().first().cart if self.get_queryset().exists() else None
         context['total'] = cart.get_cart_total if cart else 0
         return context
-
-
 
     def form_valid(self, form):
         cart = Cart.objects.filter(user=self.request.user).last()
@@ -131,6 +167,7 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
             )
 
         cart.items.all().delete()
+        cart.delete()
         return super().form_valid(form)
 
 def get_coupon(request, code):
@@ -216,14 +253,15 @@ class OrderListView(LoginRequiredMixin, ListView):
         for order in orders:
             order.order_items = OrderItem.objects.filter(order=order)
         context['orders'] = orders
+    
+        context['coupons'] = Coupon.objects.all()
+        
+        context['users'] = User.objects.all()
+
+        context['pizzas'] = Pizza.objects.all()
+
+
         return context
-
-
-class RemoveFromCartView(View):
-    def post(self, request):
-        cart_item_id = request.POST.get('cart_item_id')
-        CartItem.objects.filter(id=cart_item_id).delete()
-        return JsonResponse({'success': True})
 
 class UpdateQuantityView(View):
     def post(self, request):

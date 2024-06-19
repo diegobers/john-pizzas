@@ -9,9 +9,13 @@ urlpatterns = [
   path('pizzas/', views.PizzaListView.as_view(), name='view_pizzas'),
   path('add-cart/', views.AddToCartView.as_view(), name='add_cart'),
   path('add-pizza/', views.PizzaCreateView.as_view(), name='add_pizza'),
+  path('add-coupon/', views.CouponCreateView.as_view(), name='add_coupon'),
   #path('dashboard/', views.UserProfileDetailView.as_view(), name='dashboard'),
 
   path('cart/', views.CartView.as_view(), name='view_cart'),
+  
+  path('rm-item-cart/', views.RemoveCartItemView.as_view(), name='rm_item_cart'),
+
   path('cart-checkout/', views.CartCheckoutView.as_view(), name='checkout_cart'),
   
   path('order/', views.OrderView.as_view(), name='order_view'),
