@@ -22,7 +22,7 @@
                     <form method="post" action="{% url 'store:add_cart' %}">
                       {% csrf_token %}
                       <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
-                      {% bootstrap_button button_class="btn btn-dark w-25" button_type="submit" content="Comprar" %}
+                      {% bootstrap_button button_class="btn btn-dark w-50" button_type="submit" content="Comprar" %}
                     </form>
                   </div>
                 </div>
