@@ -52,12 +52,22 @@
             </li>
             {% endfor %}
           </ul>
+
           {% row 'd-flex align-items-end justify-content-between mb-4 mb-md-0' %}
-            {% col 'mb-2 mb-md-0' %}
-              <form>        
-              </form>
+{% col 'col-12 col-md-7' %}
+    <form method="post" action="{% url 'store:apply-coupon' %}" novalidate>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+    {% bootstrap_button button_class="btn btn-outline-dark w-50" button_type="submit" content="Aplicar" %}
+  </form>
+{% endcol %}
+
+            {% col 'col-12 col-md-auto' %} 
             {% endcol %}
+
           {% endrow  %}
+
+
         {% endcol %}
         {% col 'col-12 col-md-5 col-lg-4 offset-lg-1' %}
           <div class="card text-center mb-3 border-0 bg-light">
@@ -69,7 +79,17 @@
                       <span>{{ item.pizza.name }}</span>
                       <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
                     </li>
-                  {% endfor %}                
+                  {% endfor %}
+                  
+                  {% if cart_id.coupon %}
+
+                    <li class="list-group-item d-flex fs-lg fw-bold">
+                      <span>Desconto </span>
+                      <span class="ms-auto text-muted">- {{ cart_id.coupon.amount|floatformat }} %
+                      </span>
+                    </li>
+                  {% endif %}
+
                   <li class="list-group-item d-flex fs-lg fw-bold">
                     <span>Subtotal: R$</span>
                     <span class="ms-auto fs-sm">{{ cart_total }}

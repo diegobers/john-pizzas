@@ -12,6 +12,7 @@ urlpatterns = [
   path('add-coupon/', views.CouponCreateView.as_view(), name='add_coupon'),
   #path('dashboard/', views.UserProfileDetailView.as_view(), name='dashboard'),
 
+  path('add-cart-coupon/', views.ApplyCartCouponView.as_view(), name='apply-coupon'),
   path('cart/', views.CartView.as_view(), name='view_cart'),
   
   path('rm-item-cart/', views.RemoveCartItemView.as_view(), name='rm_item_cart'),

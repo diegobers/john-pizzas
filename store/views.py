@@ -14,7 +14,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Pizza, Cart, CartItem, Order, OrderItem, Coupon
 from django.http import JsonResponse
-from .forms import CartCheckoutForm, PizzaForm, CouponForm
+from .forms import CartCheckoutForm, PizzaForm, CouponForm, ApplyCouponForm
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -74,7 +74,9 @@ class CartView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = self.get_queryset().first().cart if self.get_queryset().exists() else None
+        context['cart_id'] = cart
         context['cart_total'] = cart.get_cart_total if cart else 0
+        context['form'] = ApplyCouponForm()
         return context
 
 
@@ -96,27 +98,28 @@ class AddToCartView(View):
         
         return redirect('store:view_cart')
 
-
-class RemoveItemFromCartView(View):
+class RemoveAllCartItemView(View):
     def post(self, request, *args, **kwargs):    
-        pizza_id = request.POST.get('pizza_id')
-
         cart_item = get_object_or_404(cart=cart, pizza=pizza_id)
         cart_item.delete()
         return redirect('store:view_cart')
 
-
 class RemoveCartItemView(DeleteView):
     model = CartItem
-    success_message = "The item has been deleted from your cart."
     http_method_names = ['post']
-
-    def get_success_url(self):
-        return reverse_lazy('store:view_cart')
+    success_url = reverse_lazy('store:view_cart')
         
     def delete(self, request, *args, **kwargs):
-        messages.success(self.request, self.success_message)
-        return super().delete(request, *args, **kwargs)
+        cart_item = self.get_object()
+        cart = cart_item.cart
+        self.object = cart_item
+        success_url = self.get_success_url()
+        self.object.delete()
+
+        if cart.cartitem_set.count() == 0:
+            cart.delete(id=cart_id)
+
+        return redirect(success_url)
 
     def get_object(self, queryset=None):
         cart_item = self.request.POST.get('item_id')
@@ -170,30 +173,41 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
         cart.delete()
         return super().form_valid(form)
 
-def get_coupon(request, code):
-    try:
-        coupon = Coupon.objects.get(code=code)
-        return coupon
-    except ObjectDoesNotExist:
-        messages.info(request, "Cupom Inválido!")
-        return redirect("store:view_cart")
+class ApplyCartCouponView(View):
+    form_class = ApplyCouponForm
+    template_name = 'store/cart.html'
+    success_url = reverse_lazy('store:view_cart')
 
-
-class AddCouponView(View):
-    def post(self, *args, **kwargs):
-        form = CouponForm(self.request.POST or None)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
+            code = form.cleaned_data.get('code')
             try:
-                code = form.cleaned_data.get('code')
-                order = Order.objects.get(
-                    user=self.request.user, ordered=False)
-                order.coupon = get_coupon(self.request, code)
-                order.save()
-                messages.success(self.request, "Successfully added coupon")
-                return redirect("store:view_cart")
-            except ObjectDoesNotExist:
-                messages.info(self.request, "You do not have an active order")
-                return redirect("store:view_cart")
+                coupon = Coupon.objects.get(code=code)
+            except Coupon.DoesNotExist:
+                messages.error(request, 'Coupon does not exist.')
+                return redirect('store:view_cart')
+
+            cart = self.get_cart(request)
+            if cart:
+                cart.coupon = coupon
+                cart.save()
+                messages.success(request, 'Coupon applied successfully.')
+                return redirect(self.success_url)
+            else:
+                messages.error(request, 'No cart found.')
+                return redirect('store:view_cart')
+
+        messages.error(request, 'Invalid form submission.')
+        return redirect('store:view_cart')
+
+    def get_cart(self, request):
+        user = request.user
+        if user.is_authenticated:
+            return Cart.objects.filter(user=user).first()
+        else:
+            return Cart.objects.filter(session_key=request.session.session_key).first()
+
 
 class OrderConfirmationView(LoginRequiredMixin, TemplateView):
     model = Order
