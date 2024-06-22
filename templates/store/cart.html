@@ -10,17 +10,19 @@
 <section id="cart">
   {% container %}
     {% if cart_items %}
-      {% row %}
+      
+      {% row 'mx-4' %}
         {% col 'col-12 text-start' %}
           <h3 class="mt-2">Meu Carrinho</h3>
         {% endcol %}
       {% endrow %}
-      {% row  %}
+
+      {% row 'd-flex justify-content-center mx-4' %}
         {% col 'col-12 col-md-7' %}
           <!-- Cart Items List -->
-          <ul class="list-group list-group-lg list-group-flush shadow rounded mb-6">
+          <ul class="list-group list-group-flush shadow-lg">
             {% for item in cart_items %}                
-            <li class="list-group-item">
+            <li class="list-group-item border-1 rounded-0">
               <div class="row align-items-center">
                 <div class="col-3">
                   <!-- Img -->
@@ -53,27 +55,38 @@
             {% endfor %}
           </ul>
 
-          {% row 'd-flex align-items-end justify-content-between mb-4 mb-md-0' %}
-{% col 'col-12 col-md-7' %}
-    <form method="post" action="{% url 'store:apply-coupon' %}" novalidate>
-        {% csrf_token %}
-        {% bootstrap_form form %}
-    {% bootstrap_button button_class="btn btn-outline-dark w-50" button_type="submit" content="Aplicar" %}
-  </form>
-{% endcol %}
+          {% row 'text-end' %}
+            {% col 'col-12 my-2' %} 
+              <a class="btn btn-link px-0 text-body" href="{% url 'store:clean_cart' %}">Limpar Carrinho</a>
+            {% endcol %}
+          {% endrow %}
 
-            {% col 'col-12 col-md-auto' %} 
+          {% row 'd-flex justify-content-start' %}
+
+            {% col 'col-12' %}
+              <form method="post" action="{% url 'store:apply-coupon' %}" novalidate>
+                {% csrf_token %}
+                
+                {% row 'd-flex justify-content-center' %}
+                  {% col 'col-8' %}
+                    {% bootstrap_field form.code field_class="border-1 rounded-0 shadow-lg w-100" show_label=False placeholder="Cupom...." %}
+                  {% endcol %}                  
+                  {% col 'col-4' %}
+                    {% bootstrap_button button_class="btn btn-dark rounded-0 w-100" button_type="submit" content="Aplicar" %}
+                  {% endcol %}
+                {% endrow  %}
+
+              </form>
             {% endcol %}
 
-          {% endrow  %}
-
-
+          {% endrow %}
         {% endcol %}
+        
         {% col 'col-12 col-md-5 col-lg-4 offset-lg-1' %}
-          <div class="card text-center mb-3 border-0 bg-light">
-            <div class="card-body pt-0">
-              <h4 class="card-title fs-lg fw-bold mb-3">Resumo</h4>
-                <ul class="list-group list-group-sm shadow rounded">
+          <div class="card text-center border-1 rounded-0 shadow-lg mb-4">
+            <div class="card-body">
+              <h4 class="card-title fw-bold my-2">Resumo</h4>
+                <ul class="list-group list-group-flush">
                   {% for item in cart_items %}                
                     <li class="list-group-item d-flex">
                       <span>{{ item.pizza.name }}</span>
@@ -91,17 +104,18 @@
                   {% endif %}
 
                   <li class="list-group-item d-flex fs-lg fw-bold">
-                    <span>Subtotal: R$</span>
-                    <span class="ms-auto fs-sm">{{ cart_total }}
+                    <span>Subtotal:</span>
+                    <span class="ms-auto fs-sm">R$ {{ cart_total|floatformat:2 }}
                     </span>
                   </li>
                 </ul>
-              <a class="btn btn-dark w-75 shadow rounded mt-4 mb-2" href="{% url 'store:checkout_cart' %}">Finalizar Carrinho</a>
+              <a class="btn btn-dark w-100 shadow-lg rounded-0 mt-4 mb-2" href="{% url 'store:checkout_cart' %}">Finalizar Carrinho</a>
               <a class="btn btn-link px-0 text-body" href="{% url 'store:index' %}">Continuar Comprando</a>
             </div>
           </div>
         {% endcol %}
       {% endrow %}
+
     {% else %}
     <!-- Null Cart -->
       {% row 'd-flex justify-content-center mt-5' %}
@@ -111,12 +125,15 @@
           <small>Você ainda não possui itens no seu carrinho.</small>
         {% endcol %}
       {% endrow %}  
+
       {% row 'd-flex justify-content-center mb-5' %}
         {% col 'col-md-8 my-2 text-center' %}
           <a class="btn btn-dark text-center w-25" href="{% url 'store:index' %}">Adicionar</a>
         {% endcol %}
       {% endrow %}
+
     {% endif %}
+
   {% endcontainer %}
 {% endblock content %}
 </section>
