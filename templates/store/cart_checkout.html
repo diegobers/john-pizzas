@@ -9,58 +9,115 @@
 <!-- Cart Confirmation Section -->
 <section id="cart-checkout">
   {% container %}
-    {% row 'mt-4' %}
+    {% row 'mx-4' %}
       {% col 'col-12 text-start' %}
-        <h3 class="text-start ms-2 my-2">Confirmar Pedido</h3>
+        <h3 class="mt-2">Concluir Pedido</h3>
       {% endcol %}
     {% endrow %}
-    {% row 'mx-md-1 mx-lg-4 px-md-1 px-lg-2 ' %}
+    
+ 
+    {% row 'd-flex justify-content-center mx-4' %}
+    
+    
       {% col 'col-12 col-md-7' %}
         <!-- Cart Items List -->
-        <ul class="list-group list-group-lg list-group-flush shadow rounded mb-6">
+        <ul class="list-group list-group-flush shadow-lg">
+    
           {% for item in cart_items %}                
-          <li class="list-group-item">
+          <li class="list-group-item border-1 rounded-0">
             <div class="row align-items-center">
-              <div class="col-3">
-                <!-- Img -->
-                <img class="img-fluid" src="{{ item.pizza.photo_main.url }}" width="128" height="128" alt="Carrinho Item Imagem">
-              </div>
-              <div class="col">
-                <!-- Product Description -->
-                <div class="d-flex mb-2 fw-bold">
-                  <h5 class="text-body">{{ item.pizza.name }}</h5>
-                  <span class="ms-auto">{{ item.pizza.price }}</span>
+                <div class="col-3">
+                  <!-- Img -->
+                  <img class="img-fluid" src="{{ item.pizza.photo_main.url }}" width="128" height="128" alt="Carrinho Item Imagem">
                 </div>
-                <!-- Form Footer -->
-                <div class="d-flex align-items-center">
-                  <p class="mt-7 fs-sm text-muted">Qtd:{{ item.quantity }}</p>
-                  <a class="fs-xs text-gray-400 ms-auto" href="#">
-                    <img src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item">
-                  </a>
+                <div class="col">
+                  <!-- Product Description -->
+                  <div class="d-flex mb-2 fw-bold">
+                    <h5 class="text-body">{{ item.pizza.name }}</h5>
+                    <span class="ms-auto">{{ item.pizza.price }}</span>
+                  </div>
+                  <!-- Form Footer -->
+                  <div class="d-flex align-items-end">
+                    <p class="text-muted mt-2 mb-0 pb-2">Qtd:{{ item.quantity }} </p>
+                    <form method="post" action="{% url 'store:add_cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
+                      <input type="image" src="{% static 'icons/plus.svg' %}" width="32" height="32" alt="Adicionar Item">
+                    </form>
+                    <form class="ms-auto" method="post" action="{% url 'store:rm_item_cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="item_id" value="{{ item.id }}">
+                      <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
+                      <input type="image" src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item">
+                    </form> 
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
+            </li>
           {% endfor %}
         </ul>
+
+          {% row 'text-end' %}
+            {% col 'col-12 my-2' %} 
+              <a class="btn btn-link px-0 text-body" href="#">Limpar Carrinho</a>
+            {% endcol %}
+          {% endrow %}
+
+          {% row 'd-flex justify-content-start' %}
+
+            {% col 'col-12' %}
+              <form method="post" action="{% url 'store:apply-coupon' %}" novalidate>
+                {% csrf_token %}
+                
+                {% row 'd-flex justify-content-center' %}
+                  {% col 'col-8' %}
+                    {% bootstrap_field form.code field_class="border-1 rounded-0 shadow-lg w-100" show_label=False placeholder="Cupom...." %}
+                  {% endcol %}                  
+                  {% col 'col-4' %}
+                    {% bootstrap_button button_class="btn btn-dark rounded-0 w-100" button_type="submit" content="Aplicar" %}
+                  {% endcol %}
+                {% endrow  %}
+
+              </form>
+            {% endcol %}
+
+          {% endrow %}
+
       {% endcol %}
+
+
       {% col 'col-12 col-md-5 col-lg-4 offset-lg-1' %}
-        <div class="card text-center mb-3 border-0 bg-light">
-            <div class="card-body pt-0">
+        <div class="card text-center border-1 rounded-0 shadow-lg mb-4">
+            <div class="card-body">
+              
+
               <h4 class="card-title fs-lg fw-bold mb-3">Resumo</h4>
-                <ul class="list-group list-group-sm shadow rounded">
-              {% for item in cart_items %}                
-                <li class="list-group-item d-flex">
-                  <span>{{ item.pizza.name }}</span>
-                  <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
-                </li>
-              {% endfor %}                
-              <li class="list-group-item d-flex fs-lg fw-bold">
-                <span>Subtotal</span>
-                <span class="ms-auto fs-sm">R$ {{ total }}
-                </span>
-              </li>
-            </ul>
+                <ul class="list-group list-group-flush">
+                  {% for item in cart_items %}                
+                    <li class="list-group-item d-flex">
+                      <span>{{ item.pizza.name }}</span>
+                      <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
+                    </li>
+                  {% endfor %}
+                  
+                  {% if cart_id.coupon %}
+
+                    <li class="list-group-item d-flex fs-lg fw-bold">
+                      <span>Desconto </span>
+                      <span class="ms-auto text-muted">- {{ cart_id.coupon.amount|floatformat }} %
+                      </span>
+                    </li>
+                  {% endif %}
+
+                  <li class="list-group-item d-flex fs-lg fw-bold">
+                    <span>Subtotal:</span>
+                    <span class="ms-auto fs-sm">R$ {{ cart_total|floatformat:2 }}
+                    </span>
+                  </li>
+                </ul>
+
+
+
             <hr class="my-4">          
             <div class="mt-4">
               <form method="post">
@@ -79,7 +136,7 @@
                   {% bootstrap_field form.observation show_label=False placeholder="Observação..." %}
                 </div>
                 <div class="mb-3">
-                  {% bootstrap_button button_type="submit" button_class="btn btn-dark w-75" content="Finalizar Pedido" %} 
+                  {% bootstrap_button button_type="submit" button_class="btn btn-dark w-75" content="Confirmar" %} 
                 </div>
               </form>
             </div>
