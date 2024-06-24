@@ -7,16 +7,14 @@
 
 {% block content %}
 <!-- Cart Section -->
-<section id="cart">
+<section id="cart-list-items">
   {% container %}
     {% if cart_items %}
-      
       {% row 'mx-4' %}
         {% col 'col-12 text-start' %}
           <h3 class="mt-2">Meu Carrinho</h3>
         {% endcol %}
       {% endrow %}
-
       {% row 'd-flex justify-content-center mx-4' %}
         {% col 'col-12 col-md-7' %}
           <!-- Cart Items List -->
@@ -37,39 +35,34 @@
                   <!-- Form Footer -->
                   <div class="d-flex align-items-end">
                     <p class="text-muted mt-2 mb-0 pb-2">Qtd:{{ item.quantity }} </p>
-<form method="post" action="{% url 'store:add_cart' %}">
-  {% csrf_token %}
-  <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
-  <input type="image" src="{% static 'icons/plus.svg' %}" width="32" height="32" alt="Adicionar Item">
-</form>
-
-<form class="ms-auto" method="post" action="{% url 'store:rm_item_cart' %}">
-  {% csrf_token %}
-  <input type="hidden" name="item_id" value="{{ item.id }}">
-  <input type="image" src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item">
-</form> 
+                    <form method="post" action="{% url 'store:add_cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
+                      <input type="image" src="{% static 'icons/plus.svg' %}" width="32" height="32" alt="Adicionar Item">
+                    </form>
+                    <form class="ms-auto" method="post" action="{% url 'store:rm_item_cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="item_id" value="{{ item.id }}">
+                      <input type="image" src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item">
+                    </form> 
                   </div>
                 </div>
               </div>
             </li>
             {% endfor %}
           </ul>
-
           {% row 'text-end' %}
             {% col 'col-12 my-2' %} 
               <form action="{% url 'store:clean_cart' %}" method="post">
                 {% csrf_token %}
-                  {% bootstrap_button button_class="btn btn-link px-0 text-body" button_type="submit" content="Limpar Carrinho" %}
+                {% bootstrap_button button_class="btn btn-link px-0 text-body" button_type="submit" content="Limpar Carrinho" %}
               </form>
             {% endcol %}
           {% endrow %}
-
           {% row 'd-flex justify-content-start' %}
-
             {% col 'col-12' %}
               <form method="post" action="{% url 'store:apply-coupon' %}" novalidate>
-                {% csrf_token %}
-                
+                {% csrf_token %}  
                 {% row 'd-flex justify-content-center' %}
                   {% col 'col-8' %}
                     {% bootstrap_field form.code field_class="border-1 rounded-0 shadow-lg w-100" show_label=False placeholder="Cupom...." %}
@@ -78,13 +71,10 @@
                     {% bootstrap_button button_class="btn btn-dark rounded-0 w-100" button_type="submit" content="Aplicar" %}
                   {% endcol %}
                 {% endrow  %}
-
               </form>
             {% endcol %}
-
           {% endrow %}
         {% endcol %}
-        
         {% col 'col-12 col-md-5 col-lg-4 offset-lg-1' %}
           <div class="card text-center border-1 rounded-0 shadow-lg mb-4">
             <div class="card-body">
@@ -96,16 +86,13 @@
                       <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
                     </li>
                   {% endfor %}
-                  
                   {% if cart_id.coupon %}
-
                     <li class="list-group-item d-flex fs-lg fw-bold">
                       <span>Desconto </span>
                       <span class="ms-auto text-muted">- {{ cart_id.coupon.amount|floatformat }} %
                       </span>
                     </li>
                   {% endif %}
-
                   <li class="list-group-item d-flex fs-lg fw-bold">
                     <span>Subtotal:</span>
                     <span class="ms-auto fs-sm">R$ {{ cart_total|floatformat:2 }}
@@ -118,7 +105,6 @@
           </div>
         {% endcol %}
       {% endrow %}
-
     {% else %}
     <!-- Null Cart -->
       {% row 'd-flex justify-content-center mt-5' %}
@@ -128,15 +114,12 @@
           <small>Você ainda não possui itens no seu carrinho.</small>
         {% endcol %}
       {% endrow %}  
-
       {% row 'd-flex justify-content-center mb-5' %}
         {% col 'col-md-8 my-2 text-center' %}
           <a class="btn btn-dark text-center w-25" href="{% url 'store:index' %}">Adicionar</a>
         {% endcol %}
       {% endrow %}
-
     {% endif %}
-
   {% endcontainer %}
 {% endblock content %}
 </section>
