@@ -80,7 +80,8 @@ class AddToCartView(View):
         cart_item, created = CartItem.objects.get_or_create(cart=cart, pizza=pizza)
         cart_item.quantity += 1
         cart_item.save()
-        
+        messages.success(request, 'Item Adicionado')
+
         return redirect('store:view_cart')
 
 class AddToCheckoutView(View):
@@ -115,6 +116,8 @@ class CleanCartView(DeleteView):
     def delete(self, request, *args, **kwargs):
         cart = self.get_object()
         cart.delete()
+        messages.warning(request, 'Carrinho Vázio')
+
         return redirect(self.get_success_url())
 
 class CleanCheckoutView(DeleteView):
@@ -130,7 +133,9 @@ class CleanCheckoutView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         cart = self.get_object()
-        cart.delete()  # Delete the cart itself
+        cart.delete()
+        messages.warning(request, 'Carrinho Vázio')
+
         return redirect(self.get_success_url())
 
 class RemoveCartItemView(View):
@@ -141,9 +146,11 @@ class RemoveCartItemView(View):
         cart_item = get_object_or_404(CartItem, id=cart_id)
         cart = cart_item.cart
         cart_item.delete()
+        messages.warning(request, 'Item Removido')
         
         if not CartItem.objects.filter(cart=cart).exists():
             cart.delete()
+
 
         return redirect(self.success_url)
 
@@ -155,6 +162,8 @@ class RemoveCheckoutItemView(View):
         cart_item = get_object_or_404(CartItem, id=cart_id)
         cart = cart_item.cart
         cart_item.delete()
+        messages.warning(request, 'Item Removido')
+
         
         if not CartItem.objects.filter(cart=cart).exists():
             cart.delete()
