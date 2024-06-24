@@ -10,14 +10,12 @@ class Pizza(models.Model):
     def __str__(self):
         return self.name
 
-
 class Coupon(models.Model):
     code = models.CharField(max_length=15)
     amount = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
         return self.code
-
 
 class Cart(models.Model):
     user = models.ForeignKey(
@@ -37,14 +35,13 @@ class Cart(models.Model):
             total *= (1 - self.coupon.amount / 100)
         return total
 
-
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
-    pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
+    pizza = models.ForeignKey(Pizza, on_delete=models.DO_NOTHING)
     quantity = models.PositiveIntegerField(default=0)
     
-#    def __str__(self):
-#        return f"CartItem {self.id} - {self.pizza.name} ({self.quantity})"
+    #def __str__(self):
+    #    return f"CartItem {self.id} - {self.pizza.name} ({self.quantity})"
     @property
     def get_cart_item_subtotal(self):
         return self.pizza.price * self.quantity
@@ -78,6 +75,6 @@ class Order(models.Model):
 
         
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-    pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.SET_NULL, null=True)
+    pizza = models.ForeignKey(Pizza, on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveIntegerField()

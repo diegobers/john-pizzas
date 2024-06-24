@@ -28,13 +28,11 @@ class IndexView(TemplateView):
         context['pizzas'] = Pizza.objects.all()
         return context
 
-
 class PizzaCreateView(CreateView):
     model = Pizza
     template_name = 'store/add_product.html'
     form_class = PizzaForm
     success_url = reverse_lazy('store:index')
-
 
 class CouponCreateView(CreateView):
     model = Coupon
@@ -42,12 +40,10 @@ class CouponCreateView(CreateView):
     form_class = CouponForm
     success_url = reverse_lazy('store:order_list')
 
-
 class PizzaListView(ListView):
     model = Pizza
     template_name = 'store/pizza_list.html'
     context_object_name = 'pizzas'
-
 
 class CartView(ListView):
     model = CartItem
@@ -79,7 +75,6 @@ class CartView(ListView):
         context['form'] = ApplyCouponForm()
         return context
 
-
 class AddToCartView(View):
     def post(self, request, *args, **kwargs):
         pizza_id = request.POST.get('pizza_id')
@@ -103,50 +98,30 @@ class CleanCartView(DeleteView):
     http_method_names = ['post']
     success_url = reverse_lazy('store:view_cart')
    
-    def delete(self, request, *args, **kwargs):    
-        cart = self.get_object()
-        self.object = cart
-        success_url = self.get_success_url()
-        self.object.delete()
-
-
-        cart = Cart.objects.filter(user=self.request.user).last()
-        print(cart)
-
-
     def get_object(self, queryset=None):
         if self.request.user.is_authenticated:
-            cart = Cart.objects.filter(user=self.request.user).last()
-            print(cart)
+            return Cart.objects.get(user=self.request.user)
+        else:
+            return Cart.objects.get(session_key=self.request.session.session_key)
 
-        elif self.request.user.is_anonymous:
-            cart = Cart.objects.filter(session_key=self.request.session.session_key).last()
-            print(cart)
-    
-        #cart_item.delete()
-        return redirect(success_url)
-
-class RemoveCartItemView(DeleteView):
-    model = CartItem
-    http_method_names = ['post']
-    success_url = reverse_lazy('store:view_cart')
-        
     def delete(self, request, *args, **kwargs):
-        cart_item = self.get_object()
+        cart = self.get_object()
+        cart.delete()  # Delete the cart itself
+        return redirect(self.get_success_url())
+
+class RemoveCartItemView(View):
+    success_url = reverse_lazy('store:view_cart')
+
+    def post(self, request, *args, **kwargs):
+        cart_id = request.POST.get('item_id')
+        cart_item = get_object_or_404(CartItem, id=cart_id)
         cart = cart_item.cart
-        self.object = cart_item
-        success_url = self.get_success_url()
-        self.object.delete()
+        cart_item.delete()
+        
+        if not CartItem.objects.filter(cart=cart).exists():
+            cart.delete()
 
-        if cart.cartitem_set.count() == 0:
-            cart.delete(id=cart_id)
-
-        return redirect(success_url)
-
-    def get_object(self, queryset=None):
-        cart_item = self.request.POST.get('item_id')
-        pizza = self.request.POST.get('pizza_id')
-        return get_object_or_404(CartItem, id=cart_item, pizza_id=pizza)
+        return redirect(self.success_url)
 
 class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
     template_name = 'store/cart_checkout.html'
@@ -167,6 +142,7 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
         context['cart_items'] = self.get_queryset() 
         cart = self.get_queryset().first().cart if self.get_queryset().exists() else None
         context['total'] = cart.get_cart_total if cart else 0
+        context['couponform'] = ApplyCouponForm()
         return context
 
     def form_valid(self, form):
@@ -230,7 +206,6 @@ class ApplyCartCouponView(View):
         else:
             return Cart.objects.filter(session_key=request.session.session_key).first()
 
-
 class OrderConfirmationView(LoginRequiredMixin, TemplateView):
     model = Order
     template_name = 'store/order_confirmation.html'
@@ -245,7 +220,6 @@ class OrderConfirmationView(LoginRequiredMixin, TemplateView):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user).last()
 
-
 class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'store/order.html'
@@ -256,7 +230,6 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
         order = self.get_object()
         context['order_items'] = OrderItem.objects.filter(order=order)
         return context
-
 
 class OrderView(LoginRequiredMixin, DetailView):
     model = Order
@@ -298,12 +271,3 @@ class OrderListView(LoginRequiredMixin, ListView):
 
 
         return context
-
-class UpdateQuantityView(View):
-    def post(self, request):
-        cart_item_id = request.POST.get('cart_item_id')
-        quantity = int(request.POST.get('quantity'))
-        cart_item = CartItem.objects.get(id=cart_item_id)
-        cart_item.quantity = quantity
-        cart_item.save()
-        return JsonResponse({'success': True})

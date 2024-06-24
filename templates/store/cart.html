@@ -37,17 +37,17 @@
                   <!-- Form Footer -->
                   <div class="d-flex align-items-end">
                     <p class="text-muted mt-2 mb-0 pb-2">Qtd:{{ item.quantity }} </p>
-                    <form method="post" action="{% url 'store:add_cart' %}">
-                      {% csrf_token %}
-                      <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
-                      <input type="image" src="{% static 'icons/plus.svg' %}" width="32" height="32" alt="Adicionar Item">
-                    </form>
-                    <form class="ms-auto" method="post" action="{% url 'store:rm_item_cart' %}">
-                      {% csrf_token %}
-                      <input type="hidden" name="item_id" value="{{ item.id }}">
-                      <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
-                      <input type="image" src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item">
-                    </form> 
+<form method="post" action="{% url 'store:add_cart' %}">
+  {% csrf_token %}
+  <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
+  <input type="image" src="{% static 'icons/plus.svg' %}" width="32" height="32" alt="Adicionar Item">
+</form>
+
+<form class="ms-auto" method="post" action="{% url 'store:rm_item_cart' %}">
+  {% csrf_token %}
+  <input type="hidden" name="item_id" value="{{ item.id }}">
+  <input type="image" src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item">
+</form> 
                   </div>
                 </div>
               </div>
@@ -57,7 +57,10 @@
 
           {% row 'text-end' %}
             {% col 'col-12 my-2' %} 
-              <a class="btn btn-link px-0 text-body" href="{% url 'store:clean_cart' %}">Limpar Carrinho</a>
+              <form action="{% url 'store:clean_cart' %}" method="post">
+                {% csrf_token %}
+                  {% bootstrap_button button_class="btn btn-link px-0 text-body" button_type="submit" content="Limpar Carrinho" %}
+              </form>
             {% endcol %}
           {% endrow %}
 
