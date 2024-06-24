@@ -98,11 +98,33 @@ class AddToCartView(View):
         
         return redirect('store:view_cart')
 
-class RemoveAllCartItemView(View):
-    def post(self, request, *args, **kwargs):    
-        cart_item = get_object_or_404(cart=cart, pizza=pizza_id)
-        cart_item.delete()
-        return redirect('store:view_cart')
+class CleanCartView(DeleteView):
+    model = Cart
+    http_method_names = ['post']
+    success_url = reverse_lazy('store:view_cart')
+   
+    def delete(self, request, *args, **kwargs):    
+        cart = self.get_object()
+        self.object = cart
+        success_url = self.get_success_url()
+        self.object.delete()
+
+
+        cart = Cart.objects.filter(user=self.request.user).last()
+        print(cart)
+
+
+    def get_object(self, queryset=None):
+        if self.request.user.is_authenticated:
+            cart = Cart.objects.filter(user=self.request.user).last()
+            print(cart)
+
+        elif self.request.user.is_anonymous:
+            cart = Cart.objects.filter(session_key=self.request.session.session_key).last()
+            print(cart)
+    
+        #cart_item.delete()
+        return redirect(success_url)
 
 class RemoveCartItemView(DeleteView):
     model = CartItem
