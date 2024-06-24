@@ -34,7 +34,7 @@ class CartCheckoutForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        self.fields['is_shipping'].initial = False
+        self.fields['is_shipping'].initial = True
         self.fields['is_shipping'].widget.attrs.update({'class': 'form-check-input shadow'})
         self.fields['shipping_address'].widget.attrs.update({'class': 'form-control shadow'})
         self.fields['payment_method'].widget.attrs.update({'class': 'form-control shadow'})

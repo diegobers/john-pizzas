@@ -19,6 +19,10 @@ urlpatterns = [
   path('rm-item-cart/', views.RemoveCartItemView.as_view(), name='rm_item_cart'),
 
   path('cart-checkout/', views.CartCheckoutView.as_view(), name='checkout_cart'),
+  path('add-checkout-coupon/', views.ApplyCheckoutCouponView.as_view(), name='checkout-coupon'),
+  path('add-checkout/', views.AddToCheckoutView.as_view(), name='add_checkout'),
+  path('rm-item-cart/', views.RemoveCheckoutItemView.as_view(), name='rm_item_checkout'),
+  path('rm-cart/', views.CleanCheckoutView.as_view(), name='clean_checkout'),
   
   path('order/', views.OrderView.as_view(), name='order_view'),
   path('order-detalhes/<int:pk>/', views.OrderDetailView.as_view(), name='order_detail'),

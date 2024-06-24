@@ -34,12 +34,12 @@
                   <!-- Form Footer -->
                   <div class="d-flex align-items-end">
                     <p class="text-muted mt-2 mb-0 pb-2">Qtd:{{ item.quantity }} </p>
-                    <form method="post" action="{% url 'store:add_cart' %}">
+                    <form method="post" action="{% url 'store:add_checkout' %}">
                       {% csrf_token %}
                       <input type="hidden" name="pizza_id" value="{{ item.pizza.id }}">
                       <input type="image" src="{% static 'icons/plus.svg' %}" width="32" height="32" alt="Adicionar Item">
                     </form>
-                    <form class="ms-auto" method="post" action="{% url 'store:rm_item_cart' %}">
+                    <form class="ms-auto" method="post" action="{% url 'store:rm_item_checkout' %}">
                       {% csrf_token %}
                       <input type="hidden" name="item_id" value="{{ item.id }}">
                       <input type="image" src="{% static 'icons/x.svg' %}" width="32" height="32" alt="Excluir Item">
@@ -52,7 +52,7 @@
         </ul>
           {% row 'text-end' %}
             {% col 'col-12 my-2' %} 
-              <form action="{% url 'store:clean_cart' %}" method="post">
+              <form action="{% url 'store:clean_checkout' %}" method="post">
                 {% csrf_token %}
                   {% bootstrap_button button_class="btn btn-link px-0 text-body" button_type="submit" content="Limpar Carrinho" %}
               </form>
@@ -60,7 +60,7 @@
           {% endrow %}
           {% row 'd-flex justify-content-start' %}
             {% col 'col-12' %}
-              <form method="post" action="{% url 'store:apply-coupon' %}" novalidate>
+              <form method="post" action="{% url 'store:checkout-coupon' %}" novalidate>
                 {% csrf_token %}
                 {% row 'd-flex justify-content-center' %}
                   {% col 'col-8' %}

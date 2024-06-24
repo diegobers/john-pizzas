@@ -83,6 +83,24 @@ class AddToCartView(View):
         
         return redirect('store:view_cart')
 
+class AddToCheckoutView(View):
+    def post(self, request, *args, **kwargs):
+        pizza_id = request.POST.get('pizza_id')
+        pizza = Pizza.objects.get(id=pizza_id)
+
+        if request.user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=request.user)
+        else:
+            if not request.session.session_key:
+                request.session.create()
+            cart, created = Cart.objects.get_or_create(session_key=request.session.session_key)
+        
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, pizza=pizza)
+        cart_item.quantity += 1
+        cart_item.save()
+        
+        return redirect('store:checkout_cart')
+
 class CleanCartView(DeleteView):
     model = Cart
     http_method_names = ['post']
@@ -99,8 +117,38 @@ class CleanCartView(DeleteView):
         cart.delete()  # Delete the cart itself
         return redirect(self.get_success_url())
 
+class CleanCheckoutView(DeleteView):
+    model = Cart
+    http_method_names = ['post']
+    success_url = reverse_lazy('store:checkout_cart')
+   
+    def get_object(self, queryset=None):
+        if self.request.user.is_authenticated:
+            return Cart.objects.get(user=self.request.user)
+        else:
+            return Cart.objects.get(session_key=self.request.session.session_key)
+
+    def delete(self, request, *args, **kwargs):
+        cart = self.get_object()
+        cart.delete()  # Delete the cart itself
+        return redirect(self.get_success_url())
+
 class RemoveCartItemView(View):
     success_url = reverse_lazy('store:view_cart')
+
+    def post(self, request, *args, **kwargs):
+        cart_id = request.POST.get('item_id')
+        cart_item = get_object_or_404(CartItem, id=cart_id)
+        cart = cart_item.cart
+        cart_item.delete()
+        
+        if not CartItem.objects.filter(cart=cart).exists():
+            cart.delete()
+
+        return redirect(self.success_url)
+
+class RemoveCheckoutItemView(View):
+    success_url = reverse_lazy('store:checkout_cart')
 
     def post(self, request, *args, **kwargs):
         cart_id = request.POST.get('item_id')
@@ -189,6 +237,41 @@ class ApplyCartCouponView(View):
 
         messages.error(request, 'Invalid form submission.')
         return redirect('store:view_cart')
+
+    def get_cart(self, request):
+        user = request.user
+        if user.is_authenticated:
+            return Cart.objects.filter(user=user).first()
+        else:
+            return Cart.objects.filter(session_key=request.session.session_key).first()
+
+class ApplyCheckoutCouponView(LoginRequiredMixin, View):
+    form_class = ApplyCouponForm
+    template_name = 'store/cart_checkout.html'
+    success_url = reverse_lazy('store:checkout_cart')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data.get('code')
+            try:
+                coupon = Coupon.objects.get(code=code)
+            except Coupon.DoesNotExist:
+                messages.error(request, 'Coupon does not exist.')
+                return redirect('store:cart_checkout')
+
+            cart = self.get_cart(request)
+            if cart:
+                cart.coupon = coupon
+                cart.save()
+                messages.success(request, 'Coupon applied successfully.')
+                return redirect(self.success_url)
+            else:
+                messages.error(request, 'No cart found.')
+                return redirect('store:cart_checkout')
+
+        messages.error(request, 'Invalid form submission.')
+        return redirect('store:cart_checkout')
 
     def get_cart(self, request):
         user = request.user
