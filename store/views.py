@@ -114,7 +114,7 @@ class CleanCartView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         cart = self.get_object()
-        cart.delete()  # Delete the cart itself
+        cart.delete()
         return redirect(self.get_success_url())
 
 class CleanCheckoutView(DeleteView):
@@ -197,7 +197,8 @@ class CartCheckoutView(LoginRequiredMixin, ListView, FormView):
             payment_method=form.cleaned_data['payment_method'],
             observation=form.cleaned_data['observation'],
             is_shipping=form.cleaned_data['is_shipping'],
-            total=sum(item.pizza.price * item.quantity for item in cart.items.all())        )   
+            total=sum(item.pizza.price * item.quantity for item in cart.items.all())        
+        )   
 
         for item in cart.items.all():
             OrderItem.objects.create(
@@ -222,20 +223,20 @@ class ApplyCartCouponView(View):
             try:
                 coupon = Coupon.objects.get(code=code)
             except Coupon.DoesNotExist:
-                messages.error(request, 'Coupon does not exist.')
+                messages.info(request, 'Cupom Inválido!')
                 return redirect('store:view_cart')
 
             cart = self.get_cart(request)
             if cart:
                 cart.coupon = coupon
                 cart.save()
-                messages.success(request, 'Coupon applied successfully.')
+                messages.success(request, 'Cupom Válido')
                 return redirect(self.success_url)
             else:
-                messages.error(request, 'No cart found.')
+                messages.error(request, 'Erro Carrinho')
                 return redirect('store:view_cart')
 
-        messages.error(request, 'Invalid form submission.')
+        messages.error(request, 'Formulário Inválido')
         return redirect('store:view_cart')
 
     def get_cart(self, request):
