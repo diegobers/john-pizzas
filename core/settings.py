@@ -37,9 +37,9 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-CSRF_ALLOWED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['https://john-pizzas-production.up.railway.app']
-CORS_ORIGINS_WHITELIST = ['https://john-pizzas-production.up.railway.app']
+CSRF_ALLOWED_ORIGINS = ['https://johnpizzas.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://johnpizzas.up.railway.app']
+CORS_ORIGINS_WHITELIST = ['https://johnpizzas.up.railway.app']
 
 # App's
 INSTALLED_APPS = [
