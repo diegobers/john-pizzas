@@ -1,14 +1,60 @@
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
+
+class CategoryA(models.Model):
+    name = models.CharField(max_length=10)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+class Category(models.Model):
+    TIPO = [
+        ('doce', 'doce'),
+        ('salgada', 'salgada'),
+    ]
+    CATEGORY_CHOICES = [
+        ('8_slices', '8 Slices'),
+        ('4_slices', '4 Slices'),
+
+    name = models.CharField(max_length=10)
+    #pizza.media pizza.
+    #pizza.broto
+
+
+class Pizza35(models.Model):  
+    sabor = models.CharField(max_length=10, choices=TIPO, default='salgada')
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    photo_main = models.ImageField(upload_to='product/', default='/product/pizza.jpeg')
+    category = models.ForeignKey(Category, related_name='pizzas', on_delete=models.CASCADE)
+    is_full = models.BooleanField(default=False)
+    size = 
+
+class PizzaBroto(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    photo_main = models.ImageField(upload_to='product/', default='/product/pizza_doce.jpeg')
 
 
 class Pizza(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=5, decimal_places=2)
     photo_main = models.ImageField(upload_to='product/', default='/product/pizza.jpeg')
+    category = models.ForeignKey(Category, related_name='pizzas', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
+
+
+
 
 class Coupon(models.Model):
     code = models.CharField(max_length=15)
