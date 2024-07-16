@@ -17,7 +17,7 @@ app_name = 'accounts'
 
 urlpatterns = [
     path('cadastro/', CustomSignupView.as_view(), name='signup'),
-    path('', CustomLoginView.as_view(), name='login'),
+    path('entrar/', CustomLoginView.as_view(), name='login'),
     #path('login_or_signup/', login_or_signup, name='login_or_signup'),
     path('sair/', LogoutView.as_view(), name='logout'),
 
